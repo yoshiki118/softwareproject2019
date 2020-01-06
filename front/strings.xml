@@ -1,0 +1,11 @@
+<?xnk version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">アカウント作成</string>
+    <string name="app_submitname">ユーザ登録画面</string>
+    <string name="app_topname">ユーザトップ画面</string>>
+<string-array name="list">
+    <item>Apple</item>
+    <item>Banana</item>
+    <item>Carrot</item>
+</string-array>
+</resources>
