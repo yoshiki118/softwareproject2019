@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
     private Button btn_login;
     private TextView link_regist;
-    private ProgressBar loading;
+    private ProgressBar loading; //進捗状況表示のための変数
     private static String URL_LOGIN = "http://52.199.105.121/login.php";
 
     @Override
@@ -51,12 +51,12 @@ public class LoginActivity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String mEmail = email.getText().toString().trim();
-                String mPass = password.getText().toString().trim();
+                String mEmail = email.getText().toString().trim(); //emailの欄に入力された内容を取得
+                String mPass = password.getText().toString().trim();//passwordの欄に入力された内容の取得
 
                 if (!mEmail.isEmpty() || !mPass.isEmpty()) {
-                    Login(mEmail, mPass);
-                } else {
+                    Login(mEmail, mPass); 
+                } else {//入力欄に何も入力されていない場合
                     email.setError("Please insert email");
                     password.setError("Please insert password");
                 }
@@ -66,42 +66,46 @@ public class LoginActivity extends AppCompatActivity {
 
         link_regist.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {//新規登録ボタン押下
                 startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
             }
         });
 
 
     }
-    private void Login(final String email, final String password) {
+    private void Login(final String email, final String password) {//引数は入力された文字列
 
         loading.setVisibility(View.VISIBLE);
         btn_login.setVisibility(View.GONE);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_LOGIN,
-                new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_LOGIN, 
+                new Response.Listener<String>() { //URL_LOGINで指定したurlに接続開始
                     @Override
                     public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            String success = jsonObject.getString("success");
+                        try { //レスポンスをjson形式で受け取り"success"に対応する文字をsuccessに代入
+                              //[{"success":"1","name":"入力した名前" ...}]のような形式で返却されていると思います
+                            JSONObject jsonObject = new JSONObject(response); 
+                            String success = jsonObject.getString("success"); 
                             JSONArray jsonArray = jsonObject.getJSONArray("login");
 
-                            if (success.equals("1")) {
+                            if (success.equals("1")) { //認証に成功するとHomeActivityへ遷移
                                 for (int i = 0; i < jsonArray.length(); i++) {
-
                                     JSONObject object = jsonArray.getJSONObject(i);
-
                                     String name = object.getString("name").trim();
                                     String email = object.getString("email").trim();
-
+				    Toast.makeText(LoginActivity.this,
+					"Success Login. \nYour Name:"
+					+name+"\nYour Email : "
+					+email,Toast.LENGTH_SHORT)
+					.show();
+				}
                                     Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                                     startActivity(intent);
                                     loading.setVisibility(View.GONE);
-                                }
+                                
                             }
 
-                        } catch (JSONException e) {
+                        } catch (JSONException e) { //エラー内容をToastで表示
                             e.printStackTrace();
                             loading.setVisibility(View.GONE);
                             btn_login.setVisibility(View.VISIBLE);
@@ -109,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 },
-                new Response.ErrorListener() {
+                new Response.ErrorListener() { //エラー内容をToastで表示
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         loading.setVisibility(View.GONE);
@@ -121,10 +125,11 @@ public class LoginActivity extends AppCompatActivity {
 
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("email", email);
-                params.put("password", password);
+            protected Map<String, String> getParams() throws AuthFailureError { //サーバに送信する文字列を設定
+                Map<String, String> params = new HashMap<>(); 
+                //Mapにデータを格納 
+                params.put("email", email); //左に格納するのはサーバ側で認識される文字列
+                params.put("password", password);//右に格納するのはxmlで設定しているid
                 return params;
 
             }
