@@ -1,0 +1,48 @@
+<?xnk version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">アカウント作成</string>
+    <string name="app_submitname">ユーザ登録画面</string>
+    <string name="app_topname">ユーザトップ画面</string>>
+    <string name="search_menu_search_text">タイトル</string>string>
+    <string name="search_menu_query_hint_text">タイトル</string>string>
+        <string name="img_description2">image2</string>
+    <string-array name="area">
+        <item></item>
+        <item>北海道</item>
+        <item>東京</item>
+        <item>沖縄</item>
+    </string-array>
+    <string-array name="genre">
+        <item></item>
+        <item>お店</item>
+        <item>料理</item>
+        <item>雰囲気</item>
+    </string-array>
+    <string-array name = "shopcategory">
+
+        <item>レストラン</item>
+        <item>喫茶店</item>
+        <item>居酒屋</item>
+    </string-array>
+    <string-array name = "cuisinecategory">
+
+        <item>和食</item>
+        <item>洋食</item>
+        <item>中華</item>
+    </string-array>
+    <string-array name = "moodcategory">
+
+        <item>静か</item>
+        <item>にぎやか</item>
+        <item>騒がしい</item>
+    </string-array>
+    <string-array name = "nullcategory">
+    </string-array>
+    <string-array name = "city">
+        <item></item>
+        <item>千代田区</item>
+        <item>港区</item>
+        <item>練馬区</item>
+    </string-array>
+
+</resources>
