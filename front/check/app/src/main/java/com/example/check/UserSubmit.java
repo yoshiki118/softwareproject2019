@@ -63,6 +63,7 @@ public class UserSubmit extends AppCompatActivity {
         ageText = (EditText)findViewById(R.id.ageText);
 
         button = (Button) findViewById(R.id.submitButton);
+        Button cbutton = (Button) findViewById(R.id.cancelbutton);
 
         accountNameLabel = (TextView) findViewById(R.id.accountNameLabel);
         userPassLabel = (TextView) findViewById(R.id.userPassLabel);
@@ -93,10 +94,14 @@ public class UserSubmit extends AppCompatActivity {
 
             }
         });
-
-
-
+        
         notequal = "パスワードが一致しません";
+        cbutton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setContentView(R.layout.user_login);
+            }
+        });
+
         button.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                final String accounttext = accountNameText.getText().toString();
@@ -109,67 +114,107 @@ public class UserSubmit extends AppCompatActivity {
                final String agelabel = ageLabel.getText().toString();
                final String arealabel = areaLabel.getText().toString();
                final String sexlabel = sexLabel.getText().toString();
-;
+               int accountflag = 0;
+               int passflag = 0;
+               int passcheckflag = 0;
+               int equalflag = 0;
+               int ageflag = 0;
+               int sexflag = 0;
+               int areaflag = 0;
 
-
-
-
-
-
-                //地域選択のspinnerの値を取得
+           //地域選択のspinnerの値を取得
                 Spinner areaspinner = (Spinner)findViewById(R.id.areaspinner);
                 final String area = (String)areaspinner.getSelectedItem();
                 final View ex = v;
-
-                if(accounttext.length() != 0){
-                    //パスワードが入力されているか
-                    if(Passtext.length() != 0){
-                        //パスワード(確認用が入力されているか)
-                        if(PassChecktext.length() != 0){
-                            //パスワードとパスワード(確認用が入力されているか)
-                            if (Passtext.equals(PassChecktext) && Passtext.length() != 0) {
-                                if(agetext.length() != 0) {
-                                    if (area.length() != 0) {
-                                        if(sextext.length() != 0) {
-
-                                            printLengthError(ex, accounttext, Passtext, PassChecktext, agetext, area, sextext);
-                                        }
-                                        else{
-                                            printMissError(v,sexlabel);
-                                        }
-
-
-
-                                    }
-                                    else{
-                                        printMissError(v, arealabel);
-                                    }
-                                }
-                                else{
-                                    printNullError(v, agelabel);
-                                }
-                            }
-                            //パスワードと確認用の不一致エラー
-                            else{
-                                printNotEqualError(v);
-                            }
-                        }
-                        //パスワード(確認用nullエラー)
-                        else{
-                            printNullError(v, passchecklabel);
-                        }
+                if(sextext.length() != 0) {
+                    sexflag = 1;
+                }
+                else{
+                    //性別未選択エラー
+                    printMissError(v,sexlabel);
+                }
+                //地域が選択されているか
+                if (area.length() != 0) {
+                    areaflag = 1;
+                }
+                else {
+                    //地域未選択エラー
+                    printMissError(v, arealabel);
+                }
+                if(agetext.length() != 0) {
+                    int iage = Integer.parseInt(agetext);
+                    if(iage < 150 && iage > 0) {
+                        ageflag = 1;
                     }
-                    //パスワードnullエラー
-                    else{
-                        printNullError(v,passlabel);
+                    else {
+                        new AlertDialog.Builder(v.getContext())
+                                .setTitle("ダイアログ")
+                                .setMessage("年齢が正しくありません")
+                                .setPositiveButton("OK", null)
+                                .show();
                     }
                 }
-                //アカウント名nullエラー
+                else{
+                    //年齢nullエラー
+                    printNullError(v, agelabel);
+                }
+
+
+                //パスワード(確認用が入力されているか)
+                if(PassChecktext.length() != 0) {
+                    passcheckflag = 1;
+                }
                 else {
+                    //パスワード確認用名nullエラー
+                    printNullError(v, passchecklabel);
+                }
+                //パスワードが入力されているか
+                if(Passtext.length() != 0) {
+                    if (Passtext.length() >= 8) {
+                        passflag = 1;
+                    }
+                    else{
+                        new AlertDialog.Builder(v.getContext())
+                                .setTitle("ダイアログ")
+                                .setMessage("パスワードが短すぎます")
+                                .setPositiveButton("OK", null)
+                                .show();
+                    }
+                }
+                else {
+                    //パスワードnullエラー
+                    printNullError(v,passlabel);
+                }
+                //パスワードとパスワードが一致するか
+                if (Passtext.equals(PassChecktext)) {
+                    equalflag = 1;
+                }
+                else if(passflag == passcheckflag){
+                    //パスワードと確認用の不一致エラー
+                    printNotEqualError(v);
+                }
+                if(accounttext.length() != 0) {
+                     if (accounttext.length() <= 8) {
+                         accountflag = 1;
+                     }
+                     else{
+                        //アカウント名の文字数エラー
+                        new AlertDialog.Builder(v.getContext())
+                                .setTitle("ダイアログ")
+                                .setMessage("アカウント名は8文字以内で入力してください")
+                                .setPositiveButton("OK", null)
+                                .show();
+                    }
+                }
+                else{
+                    //アカウント名nullエラー
+
                     printNullError(v,accountlabel);
                 }
-
-
+                //入力内容すべてが問題なければ次のエラーチェックへ
+                if (accountflag == 1 && passflag == 1 && passcheckflag == 1 && equalflag == 1 && ageflag == 1 && sexflag == 1 && areaflag == 1){
+                    nextPage();
+                }
             }
         });
 
@@ -207,51 +252,7 @@ public class UserSubmit extends AppCompatActivity {
                 .show();
     }
 
-    public void printLengthError(View v, String account, String pass, String passc, String age, String area, String sextext) {
-        //アカウント名が8文字以内か
-        if (account.length() <= 8) {
 
-            //パスワードが8～20文字以内か
-            if (pass.length() >= 8) {
-                int iage = Integer.parseInt(age);
-                if(iage < 150 && iage > 0) {
-              //1212      Regist(account, pass, iage, area, sextext,);
-                    new AlertDialog.Builder(v.getContext())
-                            .setTitle("ダイアログ")
-                            .setMessage(account + " " + pass + " "+ iage  + " " + area + " " + sextext)
-                            .setPositiveButton("OK", null)
-                            .show();
-                    nextPage();
-                }
-                else{
-                    new AlertDialog.Builder(v.getContext())
-                            .setTitle("ダイアログ")
-                            .setMessage("年齢が正しくありません")
-                            .setPositiveButton("OK", null)
-                            .show();
-                }
-
-            }
-            //パスワードの文字数エラー
-            else {
-                new AlertDialog.Builder(v.getContext())
-                        .setTitle("ダイアログ")
-                        .setMessage("パスワードが短すぎます")
-                        .setPositiveButton("OK", null)
-                        .show();
-            }
-        }
-        //アカウント名の文字数エラー
-        else {
-            new AlertDialog.Builder(v.getContext())
-                    .setTitle("ダイアログ")
-                    .setMessage("アカウント名は8文字以内で入力してください")
-                    .setPositiveButton("OK", null)
-                    .show();
-        }
-
-
-    }
     public class areaSpinnerSelectedListener implements AdapterView.OnItemSelectedListener{
         public void onItemSelected(AdapterView parent,View view, int position,long id) {
             // Spinner を取得
@@ -266,7 +267,6 @@ public class UserSubmit extends AppCompatActivity {
                         .show();
             }
         }
-
         // 何も選択されなかった時の動作
         public void onNothingSelected(AdapterView parent) {
         }
@@ -274,18 +274,13 @@ public class UserSubmit extends AppCompatActivity {
 
 
     private void Regist(String accounttext, String pass, final int agetext, final String areatext, String sextext) {
-      //  loading.setVisibility(View.VISIBLE);
-       // button.setVisibility(View.GONE);
+
         final String name = accounttext;
         final String password = pass;
         final int age = agetext;
         final String sex = sextext;
         final String area = areatext;
 
-
-        //final String name = this.accountText.getText().toString().trim();
-        //final String email = this.email.getText().toString().trim();
-        //final String password = this.Passtext.getText().toString().trim();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_REGIST,
                 new Response.Listener<String>() {
@@ -298,17 +293,12 @@ public class UserSubmit extends AppCompatActivity {
                             if (success.equals("1")) {
                                 Toast.makeText(UserSubmit.this, "Register Success!", Toast.LENGTH_SHORT).show();
                                 nextPage();
-//                                loading.setVisibility(View.GONE);
-
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(UserSubmit.this,"Register Error!" + e.toString(),Toast.LENGTH_SHORT).show();
-                      //      loading.setVisibility(View.GONE);
-                       //     button.setVisibility(View.VISIBLE);
                         }
-
                     }
                 },
                 new Response.ErrorListener() {

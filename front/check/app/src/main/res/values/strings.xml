@@ -2,7 +2,8 @@
 <resources>
     <string name="app_name">アカウント作成</string>
     <string name="app_submitname">ユーザ登録画面</string>
-    <string name="app_topname">ユーザトップ画面</string>>
+    <string name="app_topname">ユーザトップ</string>>
+    <string name="app_search">飲食店検索</string>
     <string name="search_menu_search_text">タイトル</string>string>
     <string name="search_menu_query_hint_text">タイトル</string>string>
         <string name="img_description2">image2</string>

@@ -25,12 +25,12 @@
         </activity>
         <activity
             android:name=".UserTop"
-            android:label="@string/app_name"
+            android:label="@string/app_topname"
             android:theme="@style/AppTheme">
         </activity>
         <activity
             android:name=".SearchShop"
-            android:label="@string/app_name"
+            android:label="@string/app_search"
             android:theme="@style/AppTheme">
         </activity>
         <activity
