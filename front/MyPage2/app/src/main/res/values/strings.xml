@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="app_mypage">マイページ</string>
+    <string name="app_mylist">マイリスト</string>
+    <string name="app_yuserinfo">情報編集</string>
+    <string name="app_brow">閲覧履歴</string>
+    <string name="app_review">レビュー履歴</string>
+    <string name="app_coupon">クーポン一覧</string>
+    <string name="app_inquiry">お問い合わせはこちらから</string>
+    <string name="app_paid">有料会員への変更</string>
+    <string name="app_withdraw">退会はこちらから</string>
+</resources>

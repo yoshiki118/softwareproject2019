@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="21dp"
+        android:orientation="vertical"></LinearLayout>
+
+    <Button
+        android:id="@+id/buttonmylist"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:background="@drawable/mypage_buttonlay"
+        android:text="マイリスト"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/yuserinfo"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:text="情報編集"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/browhistory"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:text="閲覧履歴"
+        android:background="@drawable/mypage_buttonlay"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/reviewhistory"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:text="レビュー履歴"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/couponlist"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:background="@drawable/mypage_buttonlay"
+        android:text="クーポン一覧"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/yuserinquiry"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:text="問い合わせ"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/paidmember"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:background="@drawable/mypage_buttonlay"
+        android:text="有料会員変更"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/buttonwithdraw"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:text="退会"
+        android:textSize="24sp" />
+
+</LinearLayout>
