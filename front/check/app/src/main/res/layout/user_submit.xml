@@ -250,6 +250,7 @@
         <!--登録ボタン-->
 
         <!--キャンセルボタン-->
+
         <Button
             android:id="@+id/submitButton"
             android:layout_width="wrap_content"

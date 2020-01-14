@@ -1,6 +1,7 @@
 package com.example.check;
 
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,13 +9,29 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONObject;
 
 public class UserSubmit extends AppCompatActivity {
     private EditText accountNameText;
@@ -30,6 +47,11 @@ public class UserSubmit extends AppCompatActivity {
     private TextView areaLabel;
     private TextView sexLabel;
     private String notequal;
+    private ProgressBar loading;
+    private static String URL_REGIST ="http://52.199.105.121/register.php";
+    private Button button;
+    private String sextext = "";
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         printUserSubmit();
@@ -40,7 +62,7 @@ public class UserSubmit extends AppCompatActivity {
         mailText = (EditText)findViewById(R.id.mailText);
         ageText = (EditText)findViewById(R.id.ageText);
 
-        Button button = (Button) findViewById(R.id.submitButton);
+        button = (Button) findViewById(R.id.submitButton);
 
         accountNameLabel = (TextView) findViewById(R.id.accountNameLabel);
         userPassLabel = (TextView) findViewById(R.id.userPassLabel);
@@ -48,10 +70,29 @@ public class UserSubmit extends AppCompatActivity {
         mailLabel = (TextView) findViewById(R.id.mailLabel);
         ageLabel = (TextView) findViewById(R.id.ageLabel);
         areaLabel =    (TextView)findViewById(R.id.areaLabel);
-        sexLabel = (TextView)findViewById(R.id.areaLabel);
+        sexLabel = (TextView)findViewById(R.id.sexLabel);
 
         //以下データ
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.sex);
+        // radioGroupの選択値が変更された時の処理を設定
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
+            public void onCheckedChanged(RadioGroup group, int checkedId){
+                // checkedIdには選択された項目のidがわたってくるので、そのidのRadioButtonを取得
+                RadioButton radioButton = (RadioButton) group.findViewById(checkedId);
 
+                // 表示する文字列を選択値によって変える
+                switch (checkedId){
+                    case R.id.man:
+                        sextext = "男性";
+                        break;
+                    case R.id.woman:
+                        sextext = "女性";
+                        break;
+
+                }
+
+            }
+        });
 
 
 
@@ -67,7 +108,9 @@ public class UserSubmit extends AppCompatActivity {
                final String passchecklabel = userPassCheckLabel.getText().toString();
                final String agelabel = ageLabel.getText().toString();
                final String arealabel = areaLabel.getText().toString();
-               String sexlabel = sexLabel.getText().toString();
+               final String sexlabel = sexLabel.getText().toString();
+;
+
 
 
 
@@ -87,8 +130,13 @@ public class UserSubmit extends AppCompatActivity {
                             if (Passtext.equals(PassChecktext) && Passtext.length() != 0) {
                                 if(agetext.length() != 0) {
                                     if (area.length() != 0) {
+                                        if(sextext.length() != 0) {
 
-                                                    printLengthError(ex, accounttext, Passtext, PassChecktext, agetext);
+                                            printLengthError(ex, accounttext, Passtext, PassChecktext, agetext, area, sextext);
+                                        }
+                                        else{
+                                            printMissError(v,sexlabel);
+                                        }
 
 
 
@@ -159,13 +207,30 @@ public class UserSubmit extends AppCompatActivity {
                 .show();
     }
 
-    public void printLengthError(View v, String account, String pass, String passc, String age) {
+    public void printLengthError(View v, String account, String pass, String passc, String age, String area, String sextext) {
         //アカウント名が8文字以内か
         if (account.length() <= 8) {
 
             //パスワードが8～20文字以内か
             if (pass.length() >= 8) {
-                nextPage();
+                int iage = Integer.parseInt(age);
+                if(iage < 150 && iage > 0) {
+              //1212      Regist(account, pass, iage, area, sextext,);
+                    new AlertDialog.Builder(v.getContext())
+                            .setTitle("ダイアログ")
+                            .setMessage(account + " " + pass + " "+ iage  + " " + area + " " + sextext)
+                            .setPositiveButton("OK", null)
+                            .show();
+                    nextPage();
+                }
+                else{
+                    new AlertDialog.Builder(v.getContext())
+                            .setTitle("ダイアログ")
+                            .setMessage("年齢が正しくありません")
+                            .setPositiveButton("OK", null)
+                            .show();
+                }
+
             }
             //パスワードの文字数エラー
             else {
@@ -185,14 +250,7 @@ public class UserSubmit extends AppCompatActivity {
                     .show();
         }
 
-        int iage = Integer.parseInt(age);
-        if(iage > 150 && iage < 0){
-            new AlertDialog.Builder(v.getContext())
-                    .setTitle("ダイアログ")
-                    .setMessage("年齢が正しくありません")
-                    .setPositiveButton("OK", null)
-                    .show();
-        }
+
     }
     public class areaSpinnerSelectedListener implements AdapterView.OnItemSelectedListener{
         public void onItemSelected(AdapterView parent,View view, int position,long id) {
@@ -212,5 +270,67 @@ public class UserSubmit extends AppCompatActivity {
         // 何も選択されなかった時の動作
         public void onNothingSelected(AdapterView parent) {
         }
+    }
+
+
+    private void Regist(String accounttext, String pass, int agetext, String areatext, String sextext) {
+      //  loading.setVisibility(View.VISIBLE);
+       // button.setVisibility(View.GONE);
+        final String name = accounttext;
+        final String password = pass;
+        final int age = agetext;
+        final String sex = sextext;
+        final String area = areatext;
+
+
+        //final String name = this.accountText.getText().toString().trim();
+        //final String email = this.email.getText().toString().trim();
+        //final String password = this.Passtext.getText().toString().trim();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_REGIST,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try{
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success = jsonObject.getString("success");
+
+                            if (success.equals("1")) {
+                                Toast.makeText(UserSubmit.this, "Register Success!", Toast.LENGTH_SHORT).show();
+                                nextPage();
+//                                loading.setVisibility(View.GONE);
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(UserSubmit.this,"Register Error!" + e.toString(),Toast.LENGTH_SHORT).show();
+                      //      loading.setVisibility(View.GONE);
+                       //     button.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(UserSubmit.this,"Register Error!" + error.toString(),Toast.LENGTH_SHORT).show();
+                    //    loading.setVisibility(View.GONE);
+                    //    button.setVisibility(View.VISIBLE);
+                    }
+                })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("name", name);
+                //params.put("email", email);
+                params.put("password", password);
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
     }
 }
