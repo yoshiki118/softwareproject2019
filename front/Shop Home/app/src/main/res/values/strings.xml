@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="app_category">初期カテゴリ編集</string>
+    <string name="app_youser">ユーザカテゴリ編集</string>
+    <string name="app_notice">お知らせ編集</string>
+    <string name="app_shophome">店舗ホーム</string>
+</resources>
