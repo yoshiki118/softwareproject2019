@@ -273,7 +273,7 @@ public class UserSubmit extends AppCompatActivity {
     }
 
 
-    private void Regist(String accounttext, String pass, int agetext, String areatext, String sextext) {
+    private void Regist(String accounttext, String pass, final int agetext, final String areatext, String sextext) {
       //  loading.setVisibility(View.VISIBLE);
        // button.setVisibility(View.GONE);
         final String name = accounttext;
@@ -322,10 +322,15 @@ public class UserSubmit extends AppCompatActivity {
         {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+                String age2 = String.valueOf(age);
                 Map<String, String> params = new HashMap<>();
                 params.put("name", name);
-                //params.put("email", email);
                 params.put("password", password);
+                params.put("age", age2);
+                params.put("sex", sex);
+                params.put("area", areatext);
+                //params.put("mail", email);
+
                 return params;
             }
         };
