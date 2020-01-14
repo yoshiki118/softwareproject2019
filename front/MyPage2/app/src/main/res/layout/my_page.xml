@@ -17,7 +17,7 @@
         android:textSize="24sp" />
 
     <Button
-        android:id="@+id/yuserinfo"
+        android:id="@+id/userinfo"
         android:layout_width="match_parent"
         android:layout_height="66dp"
         android:text="情報編集"
@@ -47,7 +47,7 @@
         android:textSize="24sp" />
 
     <Button
-        android:id="@+id/yuserinquiry"
+        android:id="@+id/userinquiry"
         android:layout_width="match_parent"
         android:layout_height="66dp"
         android:text="問い合わせ"

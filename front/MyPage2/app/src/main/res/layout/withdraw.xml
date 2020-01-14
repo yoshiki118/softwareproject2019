@@ -5,15 +5,100 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="94dp"
-        android:orientation="vertical"></LinearLayout>
+        android:layout_height="210dp"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textwithdraw"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="88dp"
+            android:orientation="vertical"></LinearLayout>
+
+        <TextView
+            android:id="@+id/textwithdraw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="退会画面"
+            android:textColor="#000000"
+            android:textSize="36sp" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:text="当てはまる退会理由を\n選択してください"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="退会画面"
-        android:gravity="center_horizontal"
-        android:textSize="36sp" />
+        android:orientation="vertical">
+
+        <RadioGroup
+            android:id="@+id/GroupRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/radioDontuse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="アプリを利用しなくなった" />
+
+            <RadioButton
+                android:id="@+id/radioNoshop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="良いお店の掲載が見当たらない" />
+
+            <RadioButton
+                android:id="@+id/radioButuse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="アプリの使い勝手が悪い" />
+
+            <RadioButton
+                android:id="@+id/radioNoinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ほしい情報がない" />
+
+            <RadioButton
+                android:id="@+id/radioReason"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="その他(理由を以下に入力)" />
+
+        </RadioGroup>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/editReason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="59dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonDraw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="退会" />
+
+        <Button
+            android:id="@+id/buttonCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="キャンセル" />
+    </LinearLayout>
 
 </LinearLayout>

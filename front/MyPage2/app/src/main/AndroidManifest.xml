@@ -28,9 +28,9 @@
             android:name=".MyList"
             android:label="@string/app_mylist">
         </activity>
-<!--.YuserInfo-->
+<!--.UserInfo-->
         <activity
-            android:name=".YuserInfo"
+            android:name=".UserInfo"
             android:label="@string/app_yuserinfo">
         </activity>
 <!--.BrowHistory-->
@@ -48,9 +48,9 @@
             android:name=".CouponList"
             android:label="@string/app_coupon">
         </activity>
-        <!--.YuserInquiry-->
+        <!--.UserInquiry-->
         <activity
-            android:name=".YuserInquiry"
+            android:name=".UserInquiry"
             android:label="@string/app_inquiry">
         </activity>
         <!--.PaidChange-->

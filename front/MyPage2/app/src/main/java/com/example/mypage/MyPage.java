@@ -33,13 +33,13 @@ public class MyPage extends AppCompatActivity {
         //←←←←←←ここまで
 
         //************情報編集への遷移**************
-        Button buttonyuserinfo = (Button) findViewById(R.id.yuserinfo);
-        //「yuserinfo」が押された時の処理は以下の通りです→→→→→→
-        buttonyuserinfo.setOnClickListener(new View.OnClickListener() {
+        Button buttonuserinfo = (Button) findViewById(R.id.userinfo);
+        //「userinfo」が押された時の処理は以下の通りです→→→→→→
+        buttonuserinfo.setOnClickListener(new View.OnClickListener() {
             //押された時の処理は以下の通りです
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MyPage.this, YuserInfo.class);
+                Intent intent = new Intent(MyPage.this, UserInfo.class);
                 startActivity(intent);
             }
         });
@@ -85,14 +85,14 @@ public class MyPage extends AppCompatActivity {
         //←←←←←←ここまで
 
         //************ユーザの問い合わせへの遷移**************
-        Button buttoninquiry = (Button) findViewById(R.id.yuserinquiry);
-        //「yuserinquiry」が押された時の処理は以下の通りです→→→→→→
+        Button buttoninquiry = (Button) findViewById(R.id.userinquiry);
+        //「userinquiry」が押された時の処理は以下の通りです→→→→→→
         buttoninquiry.setOnClickListener(new View.OnClickListener() {
             //押された時の処理は以下の通りです
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MyPage.this, YuserInquiry.class);
-                //YuserInquiry.classが仮で作った問い合わせ用クラスなので置き換えてください
+                Intent intent = new Intent(MyPage.this, UserInquiry.class);
+                //UserInquiry.classが仮で作った問い合わせ用クラスなので置き換えてください
                 startActivity(intent);
             }
         });
