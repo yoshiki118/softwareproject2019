@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Form Selection</string>
+    <string name="app_welcome">Welcome to たこやき！！</string>
+    <string name="app_userlog">ユーザログイン</string>
+    <string name="app_usertop">ユーザトップ</string>
+    <string name="app_shoplog">店舗ログイン</string>
+    <string name="app_shoptop">店舗トップ</string>
+    <string name="app_newacount">新規会員登録</string>
+</resources>

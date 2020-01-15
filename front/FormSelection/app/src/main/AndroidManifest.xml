@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.formselection">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!--FormSelectionの記述-->
+        <activity
+            android:name=".FormSelection"
+            android:label="@string/app_welcome">
+        </activity>
+
+        <!--UserLoginの記述-->
+        <activity
+            android:name=".UserLogin"
+            android:label="@string/app_userlog">
+        </activity>
+        <!--NewUserの記述-->
+        <activity
+            android:name=".NewUser"
+            android:label="@string/app_newacount">
+        </activity>
+        <!--UserTopの記述-->
+        <activity
+            android:name=".UserTop"
+            android:label="@string/app_usertop">
+        </activity>
+
+        <!--ShopLoginの記述-->
+        <activity
+            android:name=".ShopLogin"
+            android:label="@string/app_shoplog">
+        </activity>
+        <!--NewShopの記述-->
+        <activity
+            android:name=".NewShop"
+            android:label="@string/app_newacount">
+        </activity>
+        <!--ShopTopの記述-->
+        <activity
+            android:name=".ShopTop"
+            android:label="@string/app_shoptop">
+        </activity>
+
+    </application>
+
+</manifest>
