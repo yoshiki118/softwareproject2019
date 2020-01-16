@@ -1,6 +1,6 @@
 package com.example.check;
+import androidx.appcompat.app.ActionBar;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -23,6 +23,9 @@ public class SearchShop extends AppCompatActivity {
     private EditText searchText;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //アクションバーに戻るボタンを実装
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         printSearchShop();
 
         initSpinners1();
@@ -252,6 +255,15 @@ private void setCityCategory(Spinner cityspinner1){
         categoryspinner1.setAdapter(adapter);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    }
+    //戻るボタンの機能
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

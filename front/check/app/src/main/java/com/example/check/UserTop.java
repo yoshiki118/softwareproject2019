@@ -2,15 +2,19 @@ package com.example.check;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class UserTop extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         printUserTop();
         //検索ボタンの準備
         Button searchbutton = (Button)findViewById(R.id.searchbutton);
@@ -76,5 +80,14 @@ public class UserTop extends AppCompatActivity {
         Intent myPage = new Intent(UserTop.this, MyPage.class);
         startActivity(myPage);
 
+    }
+    //戻るボタンの実装
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

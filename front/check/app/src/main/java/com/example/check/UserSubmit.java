@@ -1,9 +1,11 @@
 package com.example.check;
 
+import androidx.appcompat.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,6 +31,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONObject;
@@ -72,6 +75,10 @@ public class UserSubmit extends AppCompatActivity {
         ageLabel = (TextView) findViewById(R.id.ageLabel);
         areaLabel =    (TextView)findViewById(R.id.areaLabel);
         sexLabel = (TextView)findViewById(R.id.sexLabel);
+//アクションバーに戻るボタンを実装
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
 
         //以下データ
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.sex);
@@ -218,6 +225,15 @@ public class UserSubmit extends AppCompatActivity {
             }
         });
 
+    }
+    //戻るボタンの機能
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
     public void printUserSubmit(){
         setContentView(R.layout.user_submit);
