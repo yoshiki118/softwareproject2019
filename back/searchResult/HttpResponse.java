@@ -103,8 +103,11 @@ public class HttpResponse extends AsyncTask<URL, Void, List<ShopList>>{
                 }
                 shopList.add(shops);
             }
-
-            return shopList;
+            if(shopList != null){
+              return shopList;
+            }else {
+              return null;
+            }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
@@ -115,9 +118,14 @@ public class HttpResponse extends AsyncTask<URL, Void, List<ShopList>>{
 
     /* バックグランド処理後、UIへ反映する処理 */
     protected void onPostExecute(List<ShopList> resultList) {
+      if(resultList != null){
         adapter.setShopList(resultList);
         ListView list = mainActivity.findViewById(R.id.list_view);
         list.setAdapter(adapter);
+      }else {
+        TextView result = mainActivity.findViewById(R.id.noresult);
+        result.setText("該当する店舗は有りませんでした");
+      }
     }
 
 }
