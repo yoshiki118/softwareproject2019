@@ -29,9 +29,6 @@ import java.util.Map;
 //＠＠＠＠＠＠＠ユーザログイン＠＠＠＠＠＠＠＠
 public class UserLogin extends AppCompatActivity {
     private static String URL_REGIST ="http://52.199.105.121/user_login.php";
-    //固定値とEdittextの入力内容との照合でログインできるかをテスト
-    final String USERID = "abcdefg";
-    final String USERPASS = "123456789";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +47,11 @@ public class UserLogin extends AppCompatActivity {
 
                 if (userID.length() == 0 || userPassword.length() == 0) {
                     //ユーザIDかパスワードの欄どちらかが未入力があるか
-                    Toast.makeText(UserLogin.this, "未入力の項目があります", Toast.LENGTH_LONG).show();
-
+                    new AlertDialog.Builder(view.getContext())
+                            .setTitle("エラー")
+                            .setMessage("未入力の項目があります")
+                            .setPositiveButton("OK", null)
+                            .show();
                 }else {
                     sendinfo(view, userID, userPassword);
                     }
@@ -60,11 +60,12 @@ public class UserLogin extends AppCompatActivity {
         //←←←←←←ここまで
 
         TextView newuser = (TextView) findViewById(R.id.textNewuser);
-        //「userSelect」が押された時の処理は以下の通りです→→→→→→
+        //「新規会員登録はこちら」が押された時の処理は以下の通りです→→→→→→
         newuser.setOnClickListener(new View.OnClickListener() {
             //押された時の処理は以下の通りです
             @Override
             public void onClick(View view) {
+                //ユーザ会員登録に飛ぶ
                 Intent intent = new Intent(UserLogin.this, UserSubmit.class);
                 startActivity(intent);
             }
@@ -72,7 +73,7 @@ public class UserLogin extends AppCompatActivity {
         //←←←←←←ここまで
 
     }
-    public void sendinfo(final View v,final String shopid,final String shoppass){
+    public void sendinfo(final View v,final String userid,final String userpass){
         final boolean log = false;
 
 
@@ -85,7 +86,7 @@ public class UserLogin extends AppCompatActivity {
                             String success = jsonObject.getString("success");
 
                             if (success.equals("1")) {
-                                Toast.makeText(UserLogin.this, "Register Success!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UserLogin.this, "ようこそ！！", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(UserLogin.this, UserTop.class);
                                 startActivity(intent);
 
@@ -93,7 +94,7 @@ public class UserLogin extends AppCompatActivity {
                             }
                             else{
                                 new AlertDialog.Builder(v.getContext())
-                                        .setTitle("ダイアログ")
+                                        .setTitle("エラー")
                                         .setMessage("登録されたアカウントが見つかりません")
                                         .setPositiveButton("OK", null)
                                         .show();
@@ -102,7 +103,7 @@ public class UserLogin extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                             new AlertDialog.Builder(v.getContext())
-                                    .setTitle("ダイアログ")
+                                    .setTitle("エラー")
                                     .setMessage("登録されたアカウントが見つかりません")
                                     .setPositiveButton("OK", null)
                                     .show();
@@ -122,8 +123,8 @@ public class UserLogin extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
 
-                params.put("username", shopid);
-                params.put("password", shoppass);
+                params.put("username", userid);
+                params.put("password", userpass);
 
 
                 return params;

@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="14dp"
         android:background="@android:color/holo_blue_bright"
         android:orientation="vertical">
 
@@ -62,10 +62,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-
+            android:background="@drawable/layout_user_button"
             android:text="飲食店利用者の方はこちら"
             android:textColor="#ffffff"
             android:textSize="30sp" />
+
 
         <TextView
             android:id="@+id/textNounit"
@@ -77,6 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:background="@drawable/layout_shop_button"
             android:text="店舗の方はこちら"
             android:textColor="#ffffff"
             android:textSize="36sp" />

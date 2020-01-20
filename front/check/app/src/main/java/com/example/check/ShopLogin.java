@@ -28,9 +28,6 @@ import java.util.Map;
 //＠＠＠＠＠＠＠店舗ログイン＠＠＠＠＠＠＠＠
 public class ShopLogin extends AppCompatActivity {
     private static String URL_REGIST ="http://52.199.105.121/shop_login.php";
-    //固定値とEdittextの入力内容との照合でログインできるかをテスト
-    final String SHOPID = "12345678";
-    final String SHOPPASS = "987654321";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,30 +45,25 @@ public class ShopLogin extends AppCompatActivity {
 
                 if (shopID.length() == 0 || shopPassword.length() == 0) {
                     //店舗IDかパスワードの欄どちらかが未入力があるか
-                    Toast.makeText(ShopLogin.this, "未入力の項目があります", Toast.LENGTH_LONG).show();
-                }else if(shopPassword.length() <= 7) {
-                    //入力された店舗IDとパスワードと取得した店舗IDとパスワードの両方が正しいかどうか
-                    //どちらも正しければ店舗トップページへと遷移
                     new AlertDialog.Builder(view.getContext())
-                            .setTitle("ダイアログ")
-                            .setMessage("パスワードが短すぎます")
+                            .setTitle("エラー")
+                            .setMessage("未入力の項目があります")
                             .setPositiveButton("OK", null)
                             .show();
-
-                }else {
+                }
+                else {
                     sendinfo(view, shopID, shopPassword);
-                   // Toast.makeText(ShopLogin.this, "入力内容が正しくありません", Toast.LENGTH_LONG).show();
                 }
             }
         });
         //←←←←←←ここまで
 
         TextView newshop = (TextView) findViewById(R.id.textNewshop);
-        //「userSelect」が押された時の処理は以下の通りです→→→→→→
+        //「新規会員登録はこちらから」のテキストが押された時の処理は以下の通りです→→→→→→
         newshop.setOnClickListener(new View.OnClickListener() {
-            //押された時の処理は以下の通りです
             @Override
             public void onClick(View view) {
+                //ユーザの新規会員登録へ飛ぶ
                 Intent intent = new Intent(ShopLogin.this, ShopSubmit.class);
                 startActivity(intent);
             }
@@ -92,15 +84,17 @@ public class ShopLogin extends AppCompatActivity {
                             String success = jsonObject.getString("success");
 
                             if (success.equals("1")) {
-                                Toast.makeText(ShopLogin.this, "Register Success!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(ShopLogin.this, ShopSubmit.class);
+                                Toast.makeText(ShopLogin.this, "ようこそ！！", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(ShopLogin.this, "Register Success!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(ShopLogin.this, ShopHome.class);
                                 startActivity(intent);
 
                                 // nextPage();
                             }
                             else{
+                                //入力された内容が一致しないとき
                                 new AlertDialog.Builder(v.getContext())
-                                        .setTitle("ダイアログ")
+                                        .setTitle("エラー")
                                         .setMessage("登録されたアカウントが見つかりません")
                                         .setPositiveButton("OK", null)
                                         .show();
@@ -108,8 +102,9 @@ public class ShopLogin extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            //入力されたアカウントがないとき
                             new AlertDialog.Builder(v.getContext())
-                                    .setTitle("ダイアログ")
+                                    .setTitle("エラー")
                                     .setMessage("登録されたアカウントが見つかりません")
                                     .setPositiveButton("OK", null)
                                     .show();
