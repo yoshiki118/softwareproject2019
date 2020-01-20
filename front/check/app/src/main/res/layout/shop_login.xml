@@ -14,20 +14,21 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textUserID"
+            android:id="@+id/textShopID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ユーザID"
+            android:text="店舗ID"
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/editUserID"
-            android:layout_height="wrap_content"
+            android:id="@+id/editShopID"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:textColor="#000000"
             android:ems="10"
             android:inputType="text"
-            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"/>
+            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            />
 
     </LinearLayout>
 
@@ -42,14 +43,14 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textUserPass"
+            android:id="@+id/textShopPass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="パスワード"
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/editUserPass"
+            android:id="@+id/editShopPass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -75,7 +76,7 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/buttonUserLogin"
+            android:id="@+id/buttonShopLogin"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
 
@@ -109,7 +110,7 @@
             android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/textNewuser"
+            android:id="@+id/textNewshop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"

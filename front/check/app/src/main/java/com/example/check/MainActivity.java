@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
         printMainActivity();
     }
     public void printMainActivity(){
-        Intent usersubmit = new Intent(MainActivity.this, UserSubmit.class);
+        Intent usersubmit = new Intent(MainActivity.this, FormSelection.class);
         startActivity(usersubmit);
     }
 }

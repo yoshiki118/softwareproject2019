@@ -220,12 +220,13 @@ public class UserSubmit extends AppCompatActivity {
                 }
                 //入力内容すべてが問題なければ次のエラーチェックへ
                 if (accountflag == 1 && passflag == 1 && passcheckflag == 1 && equalflag == 1 && ageflag == 1 && sexflag == 1 && areaflag == 1){
+                    Regist(accounttext, Passtext, agetext, sextext, area);
                     nextPage();
                 }
             }
         });
 
-    }
+}
     //戻るボタンの機能
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
@@ -289,11 +290,11 @@ public class UserSubmit extends AppCompatActivity {
     }
 
 
-    private void Regist(String accounttext, String pass, final int agetext, final String areatext, String sextext) {
+    private void Regist(String accounttext, String pass, final String agetext, final String areatext, String sextext) {
 
         final String name = accounttext;
         final String password = pass;
-        final int age = agetext;
+        final String age = agetext;
         final String sex = sextext;
         final String area = areatext;
 
