@@ -1,0 +1,81 @@
+package com.example.fukuda.restsearch;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+public class Search_result extends AppCompatActivity implements AdapterView.OnItemClickListener {
+    //検索パラメータ
+    private String params;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.search_result);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        //検索画面からパラメータを受け取りparamsに格納
+        Intent intent = getIntent();
+        params = intent.getStringExtra(Rest_searchActivity.EXTRA_DATA);
+        Toast.makeText(Search_result.this,params,Toast.LENGTH_LONG).show();
+        ListView listView = findViewById(R.id.list_view);
+        listView.setOnItemClickListener(this);
+        //　店舗ID
+        //String a = "&id=g249265";
+
+        try {
+            ShopAdapter adapter = new ShopAdapter(this);
+            /* 非同期通信処理の呼び出し */
+            //new HttpResponse(this, adapter).execute(new URL("https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid=85d315b3b18c6c8a69c7f0bb5f8023f9"+params));
+            new HttpResponse(this, adapter).execute(new URL("https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid=2d6d76dbefd64c4b99ee433ca37f47a1"+params));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            // 戻るボタンの処理
+            finish();
+            return super.onKeyDown(keyCode, event);
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+
+    }
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(this.getApplicationContext(),ShopInfo.class);
+
+        //String selectedText = scenes[position];
+        //int selectedPhoto = photos[position];
+
+        //intent.putExtra("Text", selectedText);
+        //intent.putExtra("Photo", selectedPhoto);
+
+        // shopinfoへ遷移
+        startActivity(intent);
+
+    }
+}
