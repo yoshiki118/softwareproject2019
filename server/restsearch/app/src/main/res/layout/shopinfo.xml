@@ -21,8 +21,9 @@
 
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="401dp"
-                android:layout_height="195dp"
+                android:layout_width="match_parent"
+                android:layout_height="188dp"
+                android:scaleType="fitXY"
                 tools:layout_editor_absoluteX="5dp"
                 tools:layout_editor_absoluteY="-1dp"
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
@@ -31,30 +32,23 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
                 android:text="Hello World!"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.526"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image"
-                app:layout_constraintVertical_bias="0.094" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
-                app:layout_constraintBottom_toTopOf="@+id/address"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.525"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image"
-                app:layout_constraintVertical_bias="0.71" />
+                android:layout_gravity="center_horizontal"
+                android:text="aaa" />
 
             <TextView
                 android:id="@+id/address"
-                android:layout_width="316dp"
-                android:layout_height="75dp"
+                android:layout_width="257dp"
+                android:layout_height="43dp"
+                android:layout_gravity="center_horizontal"
                 android:text="TextView"
                 app:layout_constraintBottom_toTopOf="@+id/tel"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -62,18 +56,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/image" />
 
+            <View
+                android:id="@+id/line_horizontal_center"
+                android:layout_width="287dp"
+                android:layout_height="3dp"
+                android:layout_gravity="center_horizontal"
+                android:background="#2196F3"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <TextView
                 android:id="@+id/qupon"
-                android:layout_width="135dp"
-                android:layout_height="21dp"
-                android:text="TextView"
-                app:layout_constraintBottom_toTopOf="@+id/address"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.123"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="クーポン無し" />
 
             <TextView
                 android:id="@+id/open"
@@ -94,16 +94,11 @@
                 android:text="TextView" />
 
             <TextView
-                android:id="@+id/station"
+                android:id="@+id/stationwalk"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView" />
 
-            <TextView
-                android:id="@+id/walk"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
 
             <TextView
                 android:id="@+id/ccard"
