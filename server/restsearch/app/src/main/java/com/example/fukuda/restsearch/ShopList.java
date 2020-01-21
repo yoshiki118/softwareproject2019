@@ -3,18 +3,18 @@ package com.example.fukuda.restsearch;
 import android.graphics.Bitmap;
 
 public class ShopList {
-    private int id;
+    private String id;
     private String name;
     private String opentime;
     private String pr_short;
     private Bitmap image;
 
 
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

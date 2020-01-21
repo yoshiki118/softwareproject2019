@@ -23,10 +23,16 @@ public class HttpResponse extends AsyncTask<URL, Void, List<ShopList>>{
 
     private Activity Search_result ;
     private ShopAdapter adapter;
+    ListView list;
+    List<ShopList> shopList;
 
-    public HttpResponse(Activity activity, ShopAdapter adapter){
+
+
+    public HttpResponse(Activity activity, ShopAdapter adapter, ListView list, List<ShopList> shopList){
         this.Search_result = activity;
         this.adapter = adapter;
+        this.list = list;
+        this.shopList = shopList;
     }
 
 
@@ -75,7 +81,7 @@ public class HttpResponse extends AsyncTask<URL, Void, List<ShopList>>{
 
             /* パース */
             JSONObject jsonObject = new JSONObject(response.toString());
-            List<ShopList> shopList = new ArrayList<>();
+
 
             // 検索結果店　を　Listで格納していく
             for(int i = 0; i < jsonObject.getInt("hit_per_page"); i++){
@@ -85,6 +91,7 @@ public class HttpResponse extends AsyncTask<URL, Void, List<ShopList>>{
 
                 ShopList shops = new ShopList();
 
+                shops.setId(res.getString("id"));
                 shops.setName(res.getString("name"));
                 shops.setOpentime(res.getString("opentime"));
                 shops.setPrshort(respr.getString("pr_short"));
@@ -116,9 +123,8 @@ public class HttpResponse extends AsyncTask<URL, Void, List<ShopList>>{
     /* バックグランド処理後、UIへ反映する処理 */
     protected void onPostExecute(List<ShopList> resultList) {
         adapter.setShopList(resultList);
-        ListView list = Search_result.findViewById(R.id.list_view);
-        list.setAdapter(adapter);
 
+        list.setAdapter(adapter);
     }
 
 }

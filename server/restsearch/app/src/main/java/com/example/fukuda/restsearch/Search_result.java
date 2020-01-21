@@ -14,10 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+
+import java.util.ArrayList;
 
 public class Search_result extends AppCompatActivity implements AdapterView.OnItemClickListener {
     //検索パラメータ
     private String params;
+    List<ShopList> shopList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +38,14 @@ public class Search_result extends AppCompatActivity implements AdapterView.OnIt
         //　店舗ID
         //String a = "&id=g249265";
 
+
+
         try {
             ShopAdapter adapter = new ShopAdapter(this);
+
             /* 非同期通信処理の呼び出し */
             //new HttpResponse(this, adapter).execute(new URL("https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid=85d315b3b18c6c8a69c7f0bb5f8023f9"+params));
-            new HttpResponse(this, adapter).execute(new URL("https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid=2d6d76dbefd64c4b99ee433ca37f47a1"+params));
+            new HttpResponse(this, adapter, listView, shopList).execute(new URL("https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid=2d6d76dbefd64c4b99ee433ca37f47a1"+params));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -68,11 +75,9 @@ public class Search_result extends AppCompatActivity implements AdapterView.OnIt
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this.getApplicationContext(),ShopInfo.class);
 
-        //String selectedText = scenes[position];
-        //int selectedPhoto = photos[position];
+        String selectedId = shopList.get(position).getId();
 
-        //intent.putExtra("Text", selectedText);
-        //intent.putExtra("Photo", selectedPhoto);
+        intent.putExtra("Id", selectedId);
 
         // shopinfoへ遷移
         startActivity(intent);

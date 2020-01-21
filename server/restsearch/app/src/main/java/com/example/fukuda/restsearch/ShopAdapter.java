@@ -36,7 +36,7 @@ public class ShopAdapter extends BaseAdapter {
     public Object getItem(int position){ return shopsList.get(position); }
 
     public long getItemId(int position){
-        return shopsList.get(position).getId();
+        return 0;
     }
 
     /*
