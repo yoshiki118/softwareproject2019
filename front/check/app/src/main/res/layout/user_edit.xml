@@ -46,19 +46,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="アカウント名(8文字以内)"
+                    android:text="アカウント名"
                     android:textSize="18sp" />
             </LinearLayout>
 
-            <EditText
+            <TextView
                 android:id="@+id/accountNameText"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/drawable_design"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:digits="0123456789abcdefghijklmnopqrstuvwxyz"/>
+                android:ems="10" />
             <!--パスワード入力-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -76,7 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="新しいパスワード"
+                    android:text="パスワード"
                     android:textSize="18sp" />
             </LinearLayout>
 
@@ -106,7 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="新しいパスワード(確認用)"
+                    android:text="パスワード(確認用)"
                     android:textSize="18sp" />
             </LinearLayout>
 
@@ -237,6 +235,14 @@
                     android:textSize="18sp" />
 
             </LinearLayout>
+            <EditText
+                android:id="@+id/mailText"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/drawable_design"
+                android:ems="10"
+                android:inputType="textPersonName" />
 
         </LinearLayout>
         <!--登録ボタン-->

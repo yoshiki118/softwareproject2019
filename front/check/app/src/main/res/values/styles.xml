@@ -8,4 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <string-array name="inquiry_title">
+        <item>要望</item>
+        <item>意見</item>
+        <item>不都合</item>
+        <item>問題報告</item>
+        <item>その他</item>
+    </string-array>
+
 </resources>

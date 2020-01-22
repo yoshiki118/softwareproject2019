@@ -1,32 +1,44 @@
 package com.example.check;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 //＠＠＠＠＠＠＠＠店舗ホーム画面＠＠＠＠＠＠＠＠＠
 public class ShopHome extends AppCompatActivity {
+    private String SHOPHOME;
 
+
+    // 戻るボタンの処理
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            // 戻るボタンの処理
+            Intent intent = new Intent(ShopHome.this, ShopLogin.class);
+            intent.putExtra("SHOPLOGIN",SHOPHOME);
+            finish();
+            return super.onKeyDown(keyCode, event);
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_home);
-        //**********初期カテゴリ編集への遷移*************
-        Button buttoncategory = (Button)findViewById(R.id.buttoncategory);
-        //「buttoncategory」が押された時の処理は以下の通りです→→→→→→
-        buttoncategory.setOnClickListener(new View.OnClickListener() {
-            //押された時の処理は以下の通りです
-            @Override
-            public void onClick(View view) {
-//                Intent intent = new Intent(ShopHome.this, ShopCategory.class);
-                Intent intent = new Intent(ShopHome.this, ShopLogin.class);
-                //遷移テスト
-                startActivity(intent);
-            }
-        });
-        //←←←←←←ここまで
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        //受け取る
+        Intent intent = getIntent();
+        SHOPHOME = intent.getStringExtra("SHOPHOME");
 
         //************ユーザカテゴリ編集への遷移************
         //「buttonuser」が押された時の処理は以下の通りです→→→→→→
@@ -35,9 +47,8 @@ public class ShopHome extends AppCompatActivity {
             //押された時の処理は以下の通りです
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(ShopHome.this, ShopUser.class);
-                Intent intent = new Intent(ShopHome.this, ShopSubmit.class);
-                //遷移テスト
+                Intent intent = new Intent(ShopHome.this, MyCategoryview.class);
+                intent.putExtra("MYCATEGORYVIEW",SHOPHOME);
                 startActivity(intent);
             }
         });
@@ -57,5 +68,16 @@ public class ShopHome extends AppCompatActivity {
             }
         });
         //←←←←←←ここまで
+    }
+    //戻るボタンの実装
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                Intent intent = new Intent(ShopHome.this, ShopLogin.class);
+                intent.putExtra("SHOPLOGIN",SHOPHOME);
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

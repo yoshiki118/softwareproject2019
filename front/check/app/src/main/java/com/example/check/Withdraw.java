@@ -2,22 +2,50 @@ package com.example.check;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.widget.Toast;
 import android.widget.RadioButton;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Withdraw extends AppCompatActivity {
     //radiobuttonが何も押されていないかを判定するための変数
     private int reasonflag = 0;
+    private String WITHDRAW;
+
+    // 戻るボタンの処理
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            // 戻るボタンの処理
+            Intent intent = new Intent(Withdraw.this, MyPage.class);
+            intent.putExtra("MYPAGE",WITHDRAW);
+            finish();
+            return super.onKeyDown(keyCode, event);
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.withdraw);
+
+        //受け取る
+        Intent intent = getIntent();
+        WITHDRAW= intent.getStringExtra("WITHDRAW");
+
+        //アクションバーに戻るボタンを実装
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         RadioButton radioDontuse = (RadioButton)findViewById(R.id.radioDontuse);
         radioDontuse.setOnClickListener(new View.OnClickListener() {
@@ -116,5 +144,28 @@ public class Withdraw extends AppCompatActivity {
             }
         });
 
+        Button cancelButton = (Button) findViewById(R.id.withCancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            //キャンセルボタンが押された時の処理は以下の通りです
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(Withdraw.this, MyPage.class);
+                intent.putExtra("MYPAGE",WITHDRAW);
+                finish();
+            }
+        });
+
+    }
+
+    //戻るボタンの実装
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                Intent intent = new Intent(Withdraw.this, MyPage.class);
+                intent.putExtra("MYPAGE",WITHDRAW);
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

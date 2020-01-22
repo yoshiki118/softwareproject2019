@@ -9,7 +9,7 @@
         android:orientation="vertical"></LinearLayout>
 
     <Button
-        android:id="@+id/userinfo"
+        android:id="@+id/useredit"
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:background="@drawable/mypage_buttonlay"

@@ -1,6 +1,7 @@
 package com.example.check;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.View;
@@ -38,6 +39,7 @@ public class ShopSubmit extends AppCompatActivity {
     private ProgressBar loading;
     private static String URL_REGIST ="http://52.199.105.121/shop_register.php";
     private Button button;
+    private String SHOPSUBMIT;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +107,15 @@ public class ShopSubmit extends AppCompatActivity {
         }
 
     }
+
+    public void nextPage(){
+        final EditText idtext = (EditText) findViewById(R.id.shopIDText);
+        String shopID = idtext.getText().toString();     // ユーザID入力文字の取得
+        SHOPSUBMIT = shopID;
+        Intent intent = new Intent(ShopSubmit.this, ShopHome.class);
+        intent.putExtra("SHOPHOME",SHOPSUBMIT);
+        startActivity(intent);
+    }
     public void sendinfo(final String shopid,final String shoppass){
 
 
@@ -118,7 +129,7 @@ public class ShopSubmit extends AppCompatActivity {
 
                                 if (success.equals("1")) {
                                     Toast.makeText(ShopSubmit.this, "Register Success!", Toast.LENGTH_SHORT).show();
-                                   // nextPage();
+                                    nextPage();
                                 }
 
                             } catch (JSONException e) {

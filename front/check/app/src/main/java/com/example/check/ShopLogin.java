@@ -3,11 +3,15 @@ package com.example.check;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
@@ -28,10 +32,27 @@ import java.util.Map;
 //＠＠＠＠＠＠＠店舗ログイン＠＠＠＠＠＠＠＠
 public class ShopLogin extends AppCompatActivity {
     private static String URL_REGIST ="http://52.199.105.121/shop_login.php";
+    private String SHOPLOGIN;
+
+    // 戻るボタンの処理
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            // 戻るボタンの処理
+            finish();
+            return super.onKeyDown(keyCode, event);
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_login);
+
+        //アクションバーに戻るボタンを実装
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         //**********ログインボタンが押された時の処理は以下の通りです*************→→→
         Button shoplogin = (Button)findViewById(R.id.buttonShopLogin);
@@ -71,6 +92,17 @@ public class ShopLogin extends AppCompatActivity {
         //←←←←←←ここまで
 
     }
+
+    //戻るボタンの実装
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void sendinfo(final View v,final String shopid,final String shoppass){
         final boolean log = false;
 
@@ -86,9 +118,12 @@ public class ShopLogin extends AppCompatActivity {
                             if (success.equals("1")) {
                                 Toast.makeText(ShopLogin.this, "ようこそ！！", Toast.LENGTH_SHORT).show();
 //                                Toast.makeText(ShopLogin.this, "Register Success!", Toast.LENGTH_SHORT).show();
+                                final EditText idtext = (EditText) findViewById(R.id.editShopID);
+                                String shopID = idtext.getText().toString();     // ユーザID入力文字の取得
+                                SHOPLOGIN = shopID;
                                 Intent intent = new Intent(ShopLogin.this, ShopHome.class);
+                                intent.putExtra("SHOPHOME",SHOPLOGIN);
                                 startActivity(intent);
-
                                 // nextPage();
                             }
                             else{

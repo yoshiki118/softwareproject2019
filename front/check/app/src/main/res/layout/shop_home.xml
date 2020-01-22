@@ -27,17 +27,6 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/buttoncategory"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/buttonstyle_category"
-                android:fontFamily="sans-serif"
-                android:text="初期\nカテゴリ編集"
-                android:textColor="#ffffffff"
-                android:textSize="36sp" />
-
-            <Button
                 android:id="@+id/buttonuser"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

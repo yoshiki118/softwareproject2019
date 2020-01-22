@@ -2,19 +2,43 @@ package com.example.check;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class UserTop extends AppCompatActivity {
+private String USERTOP;
+
+    // 戻るボタンの処理
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            // 戻るボタンの処理
+            Intent intent = new Intent(UserTop.this, UserLogin.class);
+            intent.putExtra("USERLOGIN",USERTOP);
+            finish();
+            return super.onKeyDown(keyCode, event);
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //受け取る
+        Intent intent = getIntent();
+        USERTOP = intent.getStringExtra("USERTOP");
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+
         printUserTop();
         //検索ボタンの準備
         Button searchbutton = (Button)findViewById(R.id.searchbutton);
@@ -52,39 +76,43 @@ public class UserTop extends AppCompatActivity {
             }
         });
 
-
-
-
     }
+
+
     //ユーザトップ画面の表示
     public void printUserTop(){
         setContentView(R.layout.user_top);
     }
 //次のページの処理を呼び出す
     public void nextPage(){
-        Intent searchShop = new Intent(UserTop.this, SearchShop.class);
-        startActivity(searchShop);
+        Intent intent = new Intent(UserTop.this, SearchShop.class);
+        intent.putExtra("SEARCHSHOP",USERTOP);
+        startActivity(intent);
     }
     //ユーザトップ画面の処理を呼び出す
     public void homePage(){
         Intent home = new Intent(UserTop.this, UserTop.class);
+        home.putExtra("USERTOP",USERTOP);
         startActivity(home);
     }
     //検索画面の処理を呼び出す
     public void searchPage(){
-        Intent search = new Intent(UserTop.this, SearchShop.class);
-        startActivity(search);
+        Intent intent = new Intent(UserTop.this, SearchShop.class);
+        intent.putExtra("SEARCHSHOP",USERTOP);
+        startActivity(intent);
     }
     //マイページ画面の処理を呼び出す
     public void myPage(){
         Intent myPage = new Intent(UserTop.this, MyPage.class);
+        myPage.putExtra("MYPAGE",USERTOP);
         startActivity(myPage);
-
     }
     //戻るボタンの実装
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case android.R.id.home:
+                Intent intent = new Intent(UserTop.this, UserLogin.class);
+                intent.putExtra("USERLOGIN",USERTOP);
                 finish();
                 return true;
         }

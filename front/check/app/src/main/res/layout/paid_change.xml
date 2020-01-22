@@ -98,11 +98,12 @@
             android:text="登録" />
 
         <Button
-            android:id="@+id/buttonCancel"
+            android:id="@+id/paidCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="キャンセル" />
+
     </LinearLayout>
 
 </LinearLayout>

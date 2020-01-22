@@ -10,10 +10,14 @@
     <string name="app_mypage">マイページ</string>
     <string name="app_welcome">Welcome to たこやき！！</string>
 
-    <string name="app_userinfo">情報編集</string>
+    <string name="app_useredit">情報編集</string>
     <string name="app_inquiry">お問い合わせはこちらから</string>
     <string name="app_paid">有料会員への変更</string>
     <string name="app_withdraw">退会はこちらから</string>
+
+    <string name="text_inquiry">ご意見・ご要望・各種問い合わせは下記より\n承っております。</string>
+
+    <string name="decade">UserCategories</string>
 
     <string name="search_menu_search_text">タイトル</string>string>
     <string name="search_menu_query_hint_text">タイトル</string>string>

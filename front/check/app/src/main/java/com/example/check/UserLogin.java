@@ -3,12 +3,15 @@ package com.example.check;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
@@ -28,12 +31,37 @@ import java.util.Map;
 
 //＠＠＠＠＠＠＠ユーザログイン＠＠＠＠＠＠＠＠
 public class UserLogin extends AppCompatActivity {
+    public MyApp Tobasu;
+    private EditText editText;
+    private String USERLOGIN;
     private static String URL_REGIST ="http://52.199.105.121/user_login.php";
+
+    // 戻るボタンの処理
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            //送り付ける
+//           intent.putExtra("USERLOGIN",USERTOP);
+//           Toast.makeText(UserTop.this, USERTOP, Toast.LENGTH_LONG).show();
+            // 戻るボタンの処理
+            finish();
+            return super.onKeyDown(keyCode, event);
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //shop_notice.xmlのファイルを呼び出す
         setContentView(R.layout.user_login);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+//        Intent intent = getIntent();
+//        USERLOGIN = intent.getStringExtra("USERLOGIN");
 
         //**********ログインボタンが押された時の処理は以下の通りです*************→→→
         Button userlogin = (Button)findViewById(R.id.buttonUserLogin);
@@ -43,6 +71,7 @@ public class UserLogin extends AppCompatActivity {
                 final EditText idtext = (EditText) findViewById(R.id.editUserID);
                 final EditText passtext = (EditText) findViewById(R.id.editUserPass);
                 String userID = idtext.getText().toString();     // ユーザID入力文字の取得
+                USERLOGIN = userID;
                 String userPassword = passtext.getText().toString();//ユーザパスワード入力文字列の取得
 
                 if (userID.length() == 0 || userPassword.length() == 0) {
@@ -84,10 +113,13 @@ public class UserLogin extends AppCompatActivity {
                         try{
                             JSONObject jsonObject = new JSONObject(response);
                             String success = jsonObject.getString("success");
-
                             if (success.equals("1")) {
-                                Toast.makeText(UserLogin.this, "ようこそ！！", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(UserLogin.this, "ようこそ！！", Toast.LENGTH_SHORT).show();
+                                final EditText idtext = (EditText) findViewById(R.id.editUserID);
+                                String userID = idtext.getText().toString();     // ユーザID入力文字の取得
+                                USERLOGIN = userID;
                                 Intent intent = new Intent(UserLogin.this, UserTop.class);
+                                intent.putExtra("USERTOP",USERLOGIN);
                                 startActivity(intent);
 
                                 // nextPage();
@@ -125,15 +157,20 @@ public class UserLogin extends AppCompatActivity {
 
                 params.put("username", userid);
                 params.put("password", userpass);
-
-
                 return params;
             }
         };
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
 
-
-
+    //戻るボタンの実装
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

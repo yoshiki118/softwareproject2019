@@ -54,6 +54,7 @@ public class UserSubmit extends AppCompatActivity {
     private static String URL_REGIST ="http://52.199.105.121/register.php";
     private Button button;
     private String sextext = "";
+    private String USERSUBMIT;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -221,7 +222,7 @@ public class UserSubmit extends AppCompatActivity {
                 //入力内容すべてが問題なければ次のエラーチェックへ
                 if (accountflag == 1 && passflag == 1 && passcheckflag == 1 && equalflag == 1 && ageflag == 1 && sexflag == 1 && areaflag == 1){
                     Regist(accounttext, Passtext, agetext, sextext, area);
-                    nextPage();
+//                    nextPage();
                 }
             }
         });
@@ -241,8 +242,12 @@ public class UserSubmit extends AppCompatActivity {
     }
 
     public void nextPage(){
-        Intent userTop= new Intent(UserSubmit.this, UserTop.class);
-        startActivity(userTop);
+        final EditText idtext = (EditText) findViewById(R.id.accountNameText);
+        String userID = idtext.getText().toString();     // ユーザID入力文字の取得
+        USERSUBMIT = userID;
+        Intent intent = new Intent(UserSubmit.this, UserTop.class);
+        intent.putExtra("USERTOP",USERSUBMIT);
+        startActivity(intent);
     }
 
     public void printNotEqualError(View v){
@@ -290,7 +295,7 @@ public class UserSubmit extends AppCompatActivity {
     }
 
 
-    private void Regist(String accounttext, String pass, final String agetext, final String areatext, String sextext) {
+    private void Regist(String accounttext, String pass, final String agetext,String sextext, final String areatext) {
 
         final String name = accounttext;
         final String password = pass;

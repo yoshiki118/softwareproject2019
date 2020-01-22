@@ -3,6 +3,7 @@ import androidx.appcompat.app.ActionBar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,8 +20,23 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SearchShop extends AppCompatActivity {
+private String SEARCHSHOP;
 
     private EditText searchText;
+
+    // 戻るボタンの処理
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            // 戻るボタンの処理
+            Intent intent = new Intent(SearchShop.this, UserTop.class);
+            intent.putExtra("USERTOP",SEARCHSHOP);
+            finish();
+            return super.onKeyDown(keyCode, event);
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //アクションバーに戻るボタンを実装
@@ -28,11 +44,11 @@ public class SearchShop extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         printSearchShop();
 
+        //受け取る
+        Intent intent = getIntent();
+        SEARCHSHOP = intent.getStringExtra("SEARCHSHOP");
+
         initSpinners1();
-
-
-
-
         //ユーザトップアイコンの準備
         ImageButton homeIcon = (ImageButton)findViewById(R.id.homeIcon);
         homeIcon.setOnClickListener(new View.OnClickListener(){
@@ -256,10 +272,12 @@ private void setCityCategory(Spinner cityspinner1){
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     }
-    //戻るボタンの機能
+    //戻るボタンの実装
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case android.R.id.home:
+                Intent intent = new Intent(SearchShop.this, UserTop.class);
+                intent.putExtra("USERTOP",SEARCHSHOP);
                 finish();
                 return true;
         }
