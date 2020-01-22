@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">UserEdit</string>
+    <string-array name="area">
+        <item></item>
+        <item>北海道</item>
+        <item>東京</item>
+        <item>沖縄</item>
+    </string-array>
+</resources>
