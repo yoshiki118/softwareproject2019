@@ -13,24 +13,18 @@
         <LinearLayout
             android:id="@+id/linearLayout4"
             android:layout_width="408dp"
-            android:layout_height="40dp"
+            android:layout_height="45dp"
             android:layout_marginStart="1dp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="1dp"
-            android:layout_marginBottom="10dp"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <SearchView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <LinearLayout
             android:id="@+id/linearLayout5"
             android:layout_width="364dp"
-            android:layout_height="500dp"
+            android:layout_height="400dp"
             android:layout_marginStart="1dp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="1dp"
@@ -42,107 +36,60 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
 
             <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:text="地域選択"
-                android:textSize="24sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="380dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="都道府県"
-                    android:textSize="18sp" />
-
-                <Spinner
-                    android:id="@+id/statespinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="380dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="市区町村"
-                    android:textSize="18sp" />
-
-                <Spinner
-                    android:id="@+id/cityspinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <TextView
                 android:id="@+id/textView6"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:layout_marginBottom="10dp"
-                android:text="カテゴリ選択"
+                android:text="ユーザカテゴリ選択"
                 android:textSize="24sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="376dp"
+                    android:id="@+id/genrelabel1"
+                    android:layout_width="498dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="カテゴリジャンル1"
+                    android:text="五十音を選択してください"
                     android:textSize="18sp" />
 
                 <Spinner
-                    android:id="@+id/spinner"
+                    android:id="@+id/spellspinner1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:entries="@array/genre"
+                    android:spinnerMode="dialog"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/categorylabel1"
                     android:layout_width="374dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="カテゴリ1"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
                 <Spinner
-                    android:id="@+id/spinner2"
+                    android:id="@+id/category1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
@@ -152,18 +99,20 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="カテゴリジャンル2"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:entries="@array/genre"
+                    android:spinnerMode="dialog"/>
 
                 <Spinner
-                    android:id="@+id/spinner3"
+                    android:id="@+id/spellspinner2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
@@ -175,15 +124,15 @@
                     android:text="カテゴリ2" />
 
                 <Spinner
-                    android:id="@+id/spinner4"
+                    android:id="@+id/category2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
@@ -192,18 +141,21 @@
                     android:layout_width="374dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="カテゴリジャンル3" />
+                    android:text="カテゴリジャンル3"
+                    android:textSize="18sp"
+                    android:entries="@array/genre"
+                    android:spinnerMode="dialog"/>
 
                 <Spinner
-                    android:id="@+id/spinner6"
+                    android:id="@+id/spellpinner3"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -214,9 +166,9 @@
                     android:text="カテゴリ3" />
 
                 <Spinner
-                    android:id="@+id/spinner8"
+                    android:id="@+id/category3"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1" />
             </LinearLayout>
 
@@ -237,7 +189,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="sendMassage"
+
                 app:srcCompat="@drawable/ic_home_black_24dp" />
 
             <ImageButton
@@ -256,12 +208,11 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/searchButton"
             android:layout_width="92dp"
             android:layout_height="54dp"
-            android:layout_marginStart="159dp"
-            android:layout_marginLeft="159dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="156dp"
+            android:layout_marginLeft="156dp"
             android:text="検索"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
