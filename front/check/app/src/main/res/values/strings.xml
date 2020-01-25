@@ -8,6 +8,7 @@
     <string name="app_shoplog">店舗ログイン</string>
     <string name="app_shophome">店舗トップ</string>
     <string name="app_mypage">マイページ</string>
+    <string name="app_shopinfo">店舗情報</string>
     <string name="app_welcome">Welcome to たこやき！！</string>
 
     <string name="app_editinfo">お知らせを投稿してください</string>
@@ -16,6 +17,8 @@
     <string name="app_paid">有料会員への変更</string>
     <string name="app_withdraw">退会はこちらから</string>
     <string name="app_mycategoryview">カテゴリ編集</string>
+
+    <string name="action_settings">Settings</string>
 
     <string name="text_inquiry">ご意見・ご要望・各種問い合わせは下記より\n承っております。</string>
 

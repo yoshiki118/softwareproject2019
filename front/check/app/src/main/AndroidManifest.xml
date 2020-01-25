@@ -21,6 +21,14 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.example.check.Search_result"
+            android:label="@string/app_shopinfo">
+        </activity>
+        <activity
+            android:name="com.example.check.ShopInfo"
+            android:label="@string/app_shopinfo">
+        </activity>
+        <activity
             android:name=".FormSelection"
             android:label="@string/app_welcome"
             android:theme="@style/AppTheme">
