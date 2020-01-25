@@ -40,10 +40,6 @@ public class UserLogin extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK) {
-            //送り付ける
-//           intent.putExtra("USERLOGIN",USERTOP);
-//           Toast.makeText(UserTop.this, USERTOP, Toast.LENGTH_LONG).show();
-            // 戻るボタンの処理
             finish();
             return super.onKeyDown(keyCode, event);
         } else {
@@ -54,14 +50,12 @@ public class UserLogin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //shop_notice.xmlのファイルを呼び出す
+        //ユーザログイン.xmlのファイルを呼び出す
         setContentView(R.layout.user_login);
 
+        //アクションバーに戻るボタンを追加
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-//        Intent intent = getIntent();
-//        USERLOGIN = intent.getStringExtra("USERLOGIN");
 
         //**********ログインボタンが押された時の処理は以下の通りです*************→→→
         Button userlogin = (Button)findViewById(R.id.buttonUserLogin);
@@ -74,27 +68,29 @@ public class UserLogin extends AppCompatActivity {
                 USERLOGIN = userID;
                 String userPassword = passtext.getText().toString();//ユーザパスワード入力文字列の取得
 
+                //ユーザIDかパスワードの欄どちらかが未入力があるか
                 if (userID.length() == 0 || userPassword.length() == 0) {
-                    //ユーザIDかパスワードの欄どちらかが未入力があるか
                     new AlertDialog.Builder(view.getContext())
                             .setTitle("エラー")
                             .setMessage("未入力の項目があります")
                             .setPositiveButton("OK", null)
                             .show();
-                }else {
+                }
+                //どちらの項目にも入力されているか
+                else {
                     sendinfo(view, userID, userPassword);
                     }
             }
         });
         //←←←←←←ここまで
 
-        TextView newuser = (TextView) findViewById(R.id.textNewuser);
         //「新規会員登録はこちら」が押された時の処理は以下の通りです→→→→→→
+        TextView newuser = (TextView) findViewById(R.id.textNewuser);
         newuser.setOnClickListener(new View.OnClickListener() {
             //押された時の処理は以下の通りです
             @Override
             public void onClick(View view) {
-                //ユーザ会員登録に飛ぶ
+                //ユーザ新規会員登録に飛ぶ
                 Intent intent = new Intent(UserLogin.this, UserSubmit.class);
                 startActivity(intent);
             }
@@ -102,6 +98,8 @@ public class UserLogin extends AppCompatActivity {
         //←←←←←←ここまで
 
     }
+
+    //DBとの通信
     public void sendinfo(final View v,final String userid,final String userpass){
         final boolean log = false;
 
@@ -113,17 +111,18 @@ public class UserLogin extends AppCompatActivity {
                         try{
                             JSONObject jsonObject = new JSONObject(response);
                             String success = jsonObject.getString("success");
+                            ////////////////照合が正しく行えた時の処理を以下のif文にて記述////////////////////
                             if (success.equals("1")) {
-//                                Toast.makeText(UserLogin.this, "ようこそ！！", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UserLogin.this, "ようこそ！！", Toast.LENGTH_SHORT).show();
                                 final EditText idtext = (EditText) findViewById(R.id.editUserID);
                                 String userID = idtext.getText().toString();     // ユーザID入力文字の取得
                                 USERLOGIN = userID;
                                 Intent intent = new Intent(UserLogin.this, UserTop.class);
                                 intent.putExtra("USERTOP",USERLOGIN);
                                 startActivity(intent);
-
                                 // nextPage();
                             }
+                            //入力されたアカウントとパスワードがおかしい
                             else{
                                 new AlertDialog.Builder(v.getContext())
                                         .setTitle("エラー")
@@ -154,7 +153,6 @@ public class UserLogin extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-
                 params.put("username", userid);
                 params.put("password", userpass);
                 return params;
@@ -164,7 +162,7 @@ public class UserLogin extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    //戻るボタンの実装
+    //アクションバーの戻るボタン処理
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case android.R.id.home:
@@ -173,4 +171,5 @@ public class UserLogin extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

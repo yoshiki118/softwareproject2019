@@ -62,7 +62,8 @@ public class ShopHome extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //                Intent intent = new Intent(ShopHome.this, ShopNoitice.class);
-                Intent intent = new Intent(ShopHome.this, FormSelection.class);
+                Intent intent = new Intent(ShopHome.this, EditInfo.class);
+                intent.putExtra("EDITINFO",SHOPHOME);
                 //遷移テスト
                 startActivity(intent);
             }

@@ -16,5 +16,6 @@ public class MainActivity extends AppCompatActivity {
     public void printMainActivity(){
         Intent usersubmit = new Intent(MainActivity.this, FormSelection.class);
         startActivity(usersubmit);
+        finish();
     }
 }

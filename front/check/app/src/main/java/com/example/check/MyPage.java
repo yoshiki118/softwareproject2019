@@ -14,16 +14,17 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MyPage extends AppCompatActivity {
     private String MYPAGE;
 
-    // 戻るボタンの処理
+    // 端末戻るボタンの処理
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //押されたら
         if(keyCode == KeyEvent.KEYCODE_BACK) {
-            // 戻るボタンの処理
             Intent intent = new Intent(MyPage.this, UserTop.class);
-            intent.putExtra("USERTOP",MYPAGE);
+            intent.putExtra("USERTOP",MYPAGE);//ログインされたIDを前の画面にわたす
             finish();
             return super.onKeyDown(keyCode, event);
-        } else {
+        }
+        else {
             return super.onKeyDown(keyCode, event);
         }
     }
@@ -31,9 +32,10 @@ public class MyPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //マイページ.xmlファイルの呼び出し
         setContentView(R.layout.my_page);
 
-        //受け取る
+        //ログインされたIDを前の画面から受け取る
         Intent intent = getIntent();
         MYPAGE = intent.getStringExtra("MYPAGE");
 
@@ -50,7 +52,7 @@ public class MyPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MyPage.this, UserEdit.class);
-                intent.putExtra("USEREDIT",MYPAGE);
+                intent.putExtra("USEREDIT",MYPAGE); //ログインされたIDを次の画面にわたす
                 startActivity(intent);
             }
         });
@@ -64,7 +66,7 @@ public class MyPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MyPage.this, InquiryActivity.class);
-                intent.putExtra("INQUIRYACTIVITY",MYPAGE);
+                intent.putExtra("INQUIRYACTIVITY",MYPAGE);  //ログインされたIDを次の画面にわたす
                 startActivity(intent);
             }
         });
@@ -78,7 +80,7 @@ public class MyPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MyPage.this, PaidChange.class);
-                intent.putExtra("PAIDCHANGE",MYPAGE);
+                intent.putExtra("PAIDCHANGE",MYPAGE);   //ログインされたIDを次の画面にわたす
                 startActivity(intent);
             }
         });
@@ -100,12 +102,12 @@ public class MyPage extends AppCompatActivity {
 
     }
 
-    //戻るボタンの実装
+    //アクションバー戻るボタンの処理
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case android.R.id.home:
                 Intent intent = new Intent(MyPage.this, UserTop.class);
-                intent.putExtra("USERTOP",MYPAGE);
+                intent.putExtra("USERTOP",MYPAGE);  //ログインされたIDを前の画面にわたす
                 finish();
                 return true;
         }

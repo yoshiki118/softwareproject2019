@@ -92,7 +92,16 @@
             android:theme="@style/AppTheme">
         </activity>
 
-        <activity android:name=".MyCategoryview">
+        <activity
+            android:name=".EditInfo"
+            android:label="@string/app_editinfo"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".MyCategoryview"
+            android:label="@string/app_mycategoryview"
+            android:theme="@style/AppTheme">
+
 
         </activity>
 

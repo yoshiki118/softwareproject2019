@@ -1,16 +1,31 @@
 package com.example.check;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 //＠＠＠＠＠＠＠形態選択＠＠＠＠＠＠＠＠
 public class FormSelection extends AppCompatActivity {
 
+    // 戻るボタンの処理
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+            return super.onKeyDown(keyCode, event);
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //shop_notice.xmlのファイルを呼び出す
+        //形態選択.xmlのファイルを呼び出す
         setContentView(R.layout.form_selection);
 
         //**********ユーザログインへの遷移*************
@@ -40,4 +55,5 @@ public class FormSelection extends AppCompatActivity {
         //←←←←←←ここまで
 
     }
+    
 }

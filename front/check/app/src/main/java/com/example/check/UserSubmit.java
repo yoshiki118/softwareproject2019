@@ -23,19 +23,22 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONObject;
-
+//＠＠＠＠＠＠＠ユーザ新規会員登録＠＠＠＠＠＠＠＠
 public class UserSubmit extends AppCompatActivity {
     private EditText accountNameText;
     private EditText userPassText;
@@ -52,9 +55,14 @@ public class UserSubmit extends AppCompatActivity {
     private String notequal;
     private ProgressBar loading;
     private static String URL_REGIST ="http://52.199.105.121/register.php";
+    private static String URL_Pref = "https://api.gnavi.co.jp/master/PrefSearchAPI/v3/?keyid=85d315b3b18c6c8a69c7f0bb5f8023f9&lang=ja";
+    private RequestQueue mQueue;
     private Button button;
     private String sextext = "";
     private String USERSUBMIT;
+    //都道府県
+    private ArrayAdapter<String> ad_pref;
+    private String area;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,10 +84,17 @@ public class UserSubmit extends AppCompatActivity {
         ageLabel = (TextView) findViewById(R.id.ageLabel);
         areaLabel =    (TextView)findViewById(R.id.areaLabel);
         sexLabel = (TextView)findViewById(R.id.sexLabel);
-//アクションバーに戻るボタンを実装
+        //地域選択のspinnerの値を取得
+        Spinner areaspinner = (Spinner)findViewById(R.id.areaspinner);
+        //spinnerに都道府県をセット
+        ad_pref = new ArrayAdapter<String>(UserSubmit.this, android.R.layout.simple_spinner_item);
+        areaspinner.setAdapter(ad_pref);
+        getPref(URL_Pref);
+        ad_pref.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        //++++++++++++++++++アクションバーに戻るボタンを実装+++++++++++++++++++++
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
 
         //以下データ
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.sex);
@@ -129,28 +144,26 @@ public class UserSubmit extends AppCompatActivity {
                int ageflag = 0;
                int sexflag = 0;
                int areaflag = 0;
-
-           //地域選択のspinnerの値を取得
-                Spinner areaspinner = (Spinner)findViewById(R.id.areaspinner);
-                final String area = (String)areaspinner.getSelectedItem();
+               
                 final View ex = v;
                 if(sextext.length() != 0) {
                     sexflag = 1;
                 }
+                //性別未選択エラー
                 else{
-                    //性別未選択エラー
                     printMissError(v,sexlabel);
                 }
                 //地域が選択されているか
                 if (area.length() != 0) {
                     areaflag = 1;
                 }
+                //地域未選択エラー
                 else {
-                    //地域未選択エラー
                     printMissError(v, arealabel);
                 }
                 if(agetext.length() != 0) {
                     int iage = Integer.parseInt(agetext);
+                    //入力された年齢が1～149である(入力される年齢の値としてふさわしいかどうか)
                     if(iage < 150 && iage > 0) {
                         ageflag = 1;
                     }
@@ -162,8 +175,8 @@ public class UserSubmit extends AppCompatActivity {
                                 .show();
                     }
                 }
+                //年齢nullエラー
                 else{
-                    //年齢nullエラー
                     printNullError(v, agelabel);
                 }
 
@@ -172,8 +185,8 @@ public class UserSubmit extends AppCompatActivity {
                 if(PassChecktext.length() != 0) {
                     passcheckflag = 1;
                 }
+                //パスワード確認用名nullエラー
                 else {
-                    //パスワード確認用名nullエラー
                     printNullError(v, passchecklabel);
                 }
                 //パスワードが入力されているか
@@ -181,6 +194,7 @@ public class UserSubmit extends AppCompatActivity {
                     if (Passtext.length() >= 8) {
                         passflag = 1;
                     }
+                    //パスワードが7文字未満である
                     else{
                         new AlertDialog.Builder(v.getContext())
                                 .setTitle("ダイアログ")
@@ -189,24 +203,26 @@ public class UserSubmit extends AppCompatActivity {
                                 .show();
                     }
                 }
+                //パスワードnullエラー
                 else {
-                    //パスワードnullエラー
                     printNullError(v,passlabel);
                 }
-                //パスワードとパスワードが一致するか
+                //パスワードと確認パスワードが一致するか
                 if (Passtext.equals(PassChecktext)) {
                     equalflag = 1;
                 }
+                //パスワードと確認用の不一致エラー
                 else if(passflag == passcheckflag){
-                    //パスワードと確認用の不一致エラー
+
                     printNotEqualError(v);
                 }
+
                 if(accounttext.length() != 0) {
                      if (accounttext.length() <= 8) {
                          accountflag = 1;
                      }
+                     //アカウント名の文字数エラー
                      else{
-                        //アカウント名の文字数エラー
                         new AlertDialog.Builder(v.getContext())
                                 .setTitle("ダイアログ")
                                 .setMessage("アカウント名は8文字以内で入力してください")
@@ -214,9 +230,8 @@ public class UserSubmit extends AppCompatActivity {
                                 .show();
                     }
                 }
+                //アカウント名nullエラー
                 else{
-                    //アカウント名nullエラー
-
                     printNullError(v,accountlabel);
                 }
                 //入力内容すべてが問題なければ次のエラーチェックへ
@@ -224,6 +239,22 @@ public class UserSubmit extends AppCompatActivity {
                     Regist(accounttext, Passtext, agetext, sextext, area);
 //                    nextPage();
                 }
+            }
+        });
+
+        // 都道府県spinnerのリスナーを登録
+        areaspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            //　アイテムが選択された時
+            @Override
+            public void onItemSelected(AdapterView<?> parent,
+                                       View view, int position, long id) {
+                Spinner spinner = (Spinner)parent;
+                //選択した項目の取得
+                area = spinner.getSelectedItem().toString();
+            }
+            //　アイテムが選択されなかった
+            public void onNothingSelected(AdapterView<?> parent) {
+                //
             }
         });
 
@@ -237,19 +268,22 @@ public class UserSubmit extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    //XMLファイルとの連携
     public void printUserSubmit(){
         setContentView(R.layout.user_submit);
     }
 
+    //*****************次の画面に遷移するための処理*********************
     public void nextPage(){
         final EditText idtext = (EditText) findViewById(R.id.accountNameText);
         String userID = idtext.getText().toString();     // ユーザID入力文字の取得
-        USERSUBMIT = userID;
-        Intent intent = new Intent(UserSubmit.this, UserTop.class);
-        intent.putExtra("USERTOP",USERSUBMIT);
-        startActivity(intent);
+        USERSUBMIT = userID;                           //USERSUBMITに格納
+        Intent intent = new Intent(UserSubmit.this, UserTop.class);//次の画面は??
+        intent.putExtra("USERTOP",USERSUBMIT);//ユーザホームの「USERTOP」に『USERSUBMIT』(入力されたユーザID)を受け渡す
+        startActivity(intent);                          //次の画面に遷移
     }
 
+    //パスワードが一致しない
     public void printNotEqualError(View v){
         new AlertDialog.Builder(v.getContext())
                 .setTitle("ダイアログ")
@@ -257,6 +291,7 @@ public class UserSubmit extends AppCompatActivity {
                 .setPositiveButton("OK",null)
                 .show();
     }
+    //未入力の項目エラー
     public void printNullError(View v, String error){
         String message = error + "が入力されていません";
         new AlertDialog.Builder(v.getContext())
@@ -265,6 +300,7 @@ public class UserSubmit extends AppCompatActivity {
                 .setPositiveButton("OK",null)
                 .show();
     }
+    //未選択の項目エラー
     public void printMissError(View v, String error){
         String message = error + "が選択されていません";
         new AlertDialog.Builder(v.getContext())
@@ -274,8 +310,7 @@ public class UserSubmit extends AppCompatActivity {
                 .show();
     }
 
-
-    public class areaSpinnerSelectedListener implements AdapterView.OnItemSelectedListener{
+    /*public class areaSpinnerSelectedListener implements AdapterView.OnItemSelectedListener{
         public void onItemSelected(AdapterView parent,View view, int position,long id) {
             // Spinner を取得
             Spinner spinner = (Spinner) parent;
@@ -292,9 +327,9 @@ public class UserSubmit extends AppCompatActivity {
         // 何も選択されなかった時の動作
         public void onNothingSelected(AdapterView parent) {
         }
-    }
+    }*/
 
-
+    //:::::::::::DB->UserTableへのデータ登録:::::::::::::::
     private void Regist(String accounttext, String pass, final String agetext,String sextext, final String areatext) {
 
         final String name = accounttext;
@@ -349,5 +384,40 @@ public class UserSubmit extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
+    }
+    public void getPref(final String URL) {
+        mQueue = Volley.newRequestQueue(this);;
+        mQueue.add(new JsonObjectRequest(Request.Method.GET, URL, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try{
+                            //都道府県マスタ取得APIの場合
+                            if(URL.equals(URL_Pref)) {
+                                // JSONのパース
+                                JSONArray jsonArray = response.getJSONArray("pref");
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject Pref_code = jsonArray.getJSONObject(i);
+                                    //String pref_code = Pref_code.getString("pref_code");
+                                    JSONObject Pref_name = jsonArray.getJSONObject(i);
+                                    String pref_name = Pref_name.getString("pref_name");
+                                    //spinnerで何も選択されない時のために空白を挿入
+                                    if(i == 0){
+                                        ad_pref.add("");
+                                    }
+                                    ad_pref.add(pref_name);
+                                }
+                            }
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override public void onErrorResponse(VolleyError error) {
+                        // エラー表示
+                    }
+                }));
     }
 }

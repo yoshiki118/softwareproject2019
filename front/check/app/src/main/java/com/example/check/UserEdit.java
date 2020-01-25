@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -24,9 +25,11 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,7 +50,9 @@ public class UserEdit extends AppCompatActivity {
     private TextView areaLabel;
     private TextView sexLabel;
     private String notequal;
+    private RequestQueue mQueue;
     private ProgressBar loading;
+    private static String URL_Pref = "https://api.gnavi.co.jp/master/PrefSearchAPI/v3/?keyid=85d315b3b18c6c8a69c7f0bb5f8023f9&lang=ja";
     private static String URL_REGIST = "http://52.199.105.121/UserEdit.php";
     private static String URL_NOAGE = "http://52.199.105.121/UserEditnoage.php";
     private static String URL_NOSEX = "http://52.199.105.121/UserEditnosex.php";
@@ -58,17 +63,18 @@ public class UserEdit extends AppCompatActivity {
     private static String URL_NOAGENOSEXNOAREA = "http://52.199.105.121/UserEditnoagenosexnoarea.php";
     private Button button;
     private String sextext = "";
+    private String USEREDIT;
 
-//    private final String MYNAME = "12121212";
-    private String USEREDIT = "254561";
+    //都道府県
+    private ArrayAdapter<String> ad_pref;
+    private String area;
 
-    // 戻るボタンの処理
+    // 端末戻るボタンの処理
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK) {
             Intent intent = new Intent(UserEdit.this, MyPage.class);
-            intent.putExtra("MYPAGE",USEREDIT);
-            // 戻るボタンの処理
+            intent.putExtra("MYPAGE",USEREDIT); //ログインされたIDを前の画面にわたす
             finish();
             return super.onKeyDown(keyCode, event);
         } else {
@@ -79,12 +85,20 @@ public class UserEdit extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        printUserEdit();
 
-        //受け取る
+        //地域選択のspinnerの値を取得
+        Spinner areaspinner = (Spinner)findViewById(R.id.areaspinner);
+        //spinnerに都道府県をセット
+        ad_pref = new ArrayAdapter<String>(UserEdit.this, android.R.layout.simple_spinner_item);
+        areaspinner.setAdapter(ad_pref);
+        getPref(URL_Pref);
+        ad_pref.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        ////ログインされたIDを前の画面から受け取る
         Intent intent = getIntent();
         USEREDIT = intent.getStringExtra("USEREDIT");
 
-        printUserEdit();
         //accountNameTextの設定
         accountNameText = findViewById(R.id.accountNameText);
         userPassText = (EditText) findViewById(R.id.userPassText);
@@ -103,11 +117,11 @@ public class UserEdit extends AppCompatActivity {
         areaLabel = (TextView) findViewById(R.id.areaLabel);
         sexLabel = (TextView) findViewById(R.id.sexLabel);
 
-//アクションバーに戻るボタンを実装
+        //アクションバーに戻るボタンを実装
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        //アカウント名をセット
+        //ログインしたアカウント名をセット
         accountNameText.setText(USEREDIT);
 
         //以下データ
@@ -118,7 +132,7 @@ public class UserEdit extends AppCompatActivity {
                 // checkedIdには選択された項目のidがわたってくるので、そのidのRadioButtonを取得
                 RadioButton radioButton = (RadioButton) group.findViewById(checkedId);
 
-                // 表示する文字列を選択値によって変える
+                // 性別のラジオボタンに表示する文字列を選択値によって変える
                 switch (checkedId) {
                     case R.id.man:
                         sextext = "男性";
@@ -151,7 +165,8 @@ public class UserEdit extends AppCompatActivity {
                 final String agelabel = ageLabel.getText().toString();
                 final String arealabel = areaLabel.getText().toString();
                 final String sexlabel = sexLabel.getText().toString();
-                int accountflag = 0;
+//                int accountflag = 0;
+                int accountflag = 1;
                 int passflag = 0;
                 int passcheckflag = 0;
                 int equalflag = 0;
@@ -159,128 +174,179 @@ public class UserEdit extends AppCompatActivity {
                 int sexflag = 0;
                 int areaflag = 0;
 
-                //地域選択のspinnerの値を取得
-                Spinner areaspinner = (Spinner) findViewById(R.id.areaspinner);
-                final String area = (String) areaspinner.getSelectedItem();
-                final View ex = v;
+//                //地域選択のspinnerの値を取得
+//                Spinner areaspinner = (Spinner) findViewById(R.id.areaspinner);
+//                final String area = (String) areaspinner.getSelectedItem();
+//                final View ex = v;
+                //性別に選択があるか
                 if (sextext.length() != 0) {
                     sexflag = 1;
-                } else {
-                    //性別未選択エラー
-//                    printMissError(v, sexlabel);
-
                 }
+//                 else {
+//                    printMissError(v, sexlabel);
+//                }
                 //地域が選択されているか
+                //地域に選択があるか
                 if (area.length() != 0) {
                     areaflag = 1;
-                } else {
-                    //地域未選択エラー
-//                    printMissError(v, arealabel);
                 }
+//                else {
+//                  地域未選択エラー
+//                  printMissError(v, arealabel);
+//                }
+                //年齢が入力されているか
+                //年齢に入力があるか
                 if (agetext.length() != 0) {
                     int iage = Integer.parseInt(agetext);
+                    //入力された値が年齢としてふさわしい値か(1～149)
                     if (iage < 150 && iage > 0) {
                         ageflag = 1;
-                    } else {
+                    }
+                    else {
                         new AlertDialog.Builder(v.getContext())
                                 .setTitle("ダイアログ")
                                 .setMessage("年齢が正しくありません")
                                 .setPositiveButton("OK", null)
                                 .show();
                     }
-                } else {
-                    //年齢nullエラー
-                    //printNullError(v, agelabel);
                 }
+//                else {
+//                    //年齢nullエラー
+//                    //printNullError(v, agelabel);
+//                }
 
 
-                //パスワード(確認用が入力されているか)
-                if (PassChecktext.length() != 0) {
-                    passcheckflag = 1;
-                } else {
-                    //パスワード確認用名nullエラー
-                    printNullError(v, passchecklabel);
-                }
                 //パスワードが入力されているか
                 if (Passtext.length() != 0) {
+                    //パスワードが8文字以上か
                     if (Passtext.length() >= 8) {
                         passflag = 1;
-                    } else {
+                        //パスワード(確認用)が入力されているか
+                        //確認用パスワードに入力があるか
+                        if (PassChecktext.length() != 0) {
+                            passcheckflag = 1;
+                        }
+                        //パスワード確認用名nullエラー
+                        else {
+                            printNullError(v, passchecklabel);
+                        }
+                    }
+                    //パスワードが7文字未満だとダイアログ表示
+                    else {
                         new AlertDialog.Builder(v.getContext())
                                 .setTitle("ダイアログ")
                                 .setMessage("パスワードが短すぎます")
                                 .setPositiveButton("OK", null)
                                 .show();
                     }
-                } else {
-                    //パスワードnullエラー
+
+                }
+                //パスワードnullエラー
+                else {
                     printNullError(v, passlabel);
                 }
-                //パスワードとパスワードが一致するか
+
+                //パスワードと確認用パスワードが一致するか
                 if (Passtext.equals(PassChecktext)) {
                     equalflag = 1;
-                } else if (passflag == passcheckflag) {
-                    //パスワードと確認用の不一致エラー
+                }
+                //パスワードと確認用の不一致エラー
+                else if (passflag == passcheckflag) {
                     printNotEqualError(v);
                 }
-                if (accounttext.length() != 0) {
-                    if (accounttext.length() <= 8) {
-                        accountflag = 1;
-                    } else {
-                        //アカウント名の文字数エラー
-                        new AlertDialog.Builder(v.getContext())
-                                .setTitle("ダイアログ")
-                                .setMessage("アカウント名は8文字以内で入力してください")
-                                .setPositiveButton("OK", null)
-                                .show();
-                    }
-                } else {
-                    //アカウント名nullエラー
+//                //アカウントに入力があるか
+//                if (accounttext.length() != 0) {
+//                    //入力文字列が8文字以上か
+//                    if (accounttext.length() <= 8) {
+//                        accountflag = 1;
+//                    }
+//                    //アカウント名の文字数エラー
+//                    else {
+//                        new AlertDialog.Builder(v.getContext())
+//                                .setTitle("ダイアログ")
+//                                .setMessage("アカウント名は8文字以内で入力してください")
+//                                .setPositiveButton("OK", null)
+//                                .show();
+//                    }
+//                }
+//                //アカウント名nullエラー
+//                else {
+//                    printNullError(v, accountlabel);
+//                }
 
-                    printNullError(v, accountlabel);
-                }
                 //入力内容すべてが問題なければ次のエラーチェックへ
-                if (accountflag == 1 && passflag == 1 && passcheckflag == 1 && equalflag == 1 && ageflag == 1 && sexflag == 1 && areaflag == 1) {
+                if (passflag == 1 && passcheckflag == 1 && equalflag == 1 && ageflag == 1 && sexflag == 1 && areaflag == 1) {
                     EditFull(Passtext, agetext, sextext, area);
                     nextPage();
-                }else if(accountflag == 1 && passflag == 1 && passcheckflag == 1 && equalflag == 1 && sexflag == 1 && areaflag == 1){
+                }
+                //年齢以外に入力がある
+                else if( passflag == 1 && passcheckflag == 1 && equalflag == 1 && sexflag == 1 && areaflag == 1){
                     EditNAge(Passtext,area,sextext);
-                }else if(accountflag == 1 && passflag == 1 && passcheckflag == 1 && equalflag == 1 && ageflag == 1 && areaflag == 1){
+                }
+                //性別以外に入力がある
+                else if( passflag == 1 && passcheckflag == 1 && equalflag == 1 && ageflag == 1 && areaflag == 1){
                     EditNSex(Passtext, agetext, area);
-                }else if(accountflag == 1 && passflag == 1 && passcheckflag == 1 && equalflag == 1 && ageflag == 1 && sexflag == 1){
+                }
+                //地域以外に入力がある
+                else if( passflag == 1 && passcheckflag == 1 && equalflag == 1 && ageflag == 1 && sexflag == 1){
                     EditNArea(Passtext, agetext, sextext);
-                }else if(accountflag == 1 && passflag == 1 && passcheckflag == 1 && equalflag == 1 && ageflag == 1){
+                }
+                //性別と地域以外に入力がある
+                else if( passflag == 1 && passcheckflag == 1 && equalflag == 1 && ageflag == 1){
                     EditAge(Passtext, agetext);
-                }else if(accountflag == 1 && passflag == 1 && passcheckflag == 1 && equalflag == 1 && sexflag == 1){
+                }
+                //年齢と地域以外に入力がある
+                else if( passflag == 1 && passcheckflag == 1 && equalflag == 1 && sexflag == 1){
                     EditSex(Passtext, sextext);
-                }else if(accountflag == 1 && passflag == 1 && passcheckflag == 1 && equalflag == 1 && areaflag == 1){
+                }
+                //年齢と性別以外に入力がある
+                else if(passflag == 1 && passcheckflag == 1 && equalflag == 1 && areaflag == 1){
                     EditArea(Passtext, area);
-                }else if(accountflag == 1 && passflag == 1 && passcheckflag == 1 && equalflag == 1){
+                }
+                //パスワードに入力がある
+                else if(passflag == 1 && passcheckflag == 1 && equalflag == 1){
                     EditPass(Passtext);
                 }
             }
         });
-
+        // 都道府県spinnerのリスナーを登録
+        areaspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            //　アイテムが選択された時
+            @Override
+            public void onItemSelected(AdapterView<?> parent,
+                                       View view, int position, long id) {
+                Spinner spinner = (Spinner)parent;
+                //選択した項目の取得
+                area = spinner.getSelectedItem().toString();
+            }
+            //　アイテムが選択されなかった
+            public void onNothingSelected(AdapterView<?> parent) {
+                //
+            }
+        });
     }
 
+    //アクションバー戻るボタン処理
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent intent = new Intent(UserEdit.this, MyPage.class);
-                intent.putExtra("MYPAGE",USEREDIT);
+                intent.putExtra("MYPAGE",USEREDIT);//ログインされたIDを前の画面にわたす
                 finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    //情報編集画面.xmlの呼び出し
     public void printUserEdit() {
         setContentView(R.layout.user_edit);
     }
 
+    //情報変更完了時のページ遷移・処理
     public void nextPage() {
         Intent intent = new Intent(UserEdit.this, MyPage.class);
-        intent.putExtra("MYPAGE",USEREDIT);
+        intent.putExtra("MYPAGE",USEREDIT);//ログインされたIDを次の画面に渡す
         finish();
     }
 
@@ -301,6 +367,7 @@ public class UserEdit extends AppCompatActivity {
                 .show();
     }
 
+    //何か選択されていない場合にダイアログ表示するための処理
     public void printMissError(View v, String error) {
         String message = error + "が選択されていません";
         new AlertDialog.Builder(v.getContext())
@@ -310,30 +377,29 @@ public class UserEdit extends AppCompatActivity {
                 .show();
     }
 
+//    public class areaSpinnerSelectedListener implements AdapterView.OnItemSelectedListener {
+//        public void onItemSelected(AdapterView parent, View view, int position, long id) {
+//            // Spinner を取得
+//            Spinner spinner = (Spinner) parent;
+//            // 選択されたアイテムのテキストを取得
+//            String str = spinner.getSelectedItem().toString();
+//            if (!str.equals("")) {
+//                new AlertDialog.Builder(view.getContext())
+//                        .setTitle("ダイアログ")
+//                        .setMessage("地域を選択してください")
+//                        .setPositiveButton("OK", null)
+//                        .show();
+//            }
+//        }
+//
+//        // 何も選択されなかった時の動作
+//        public void onNothingSelected(AdapterView parent) {
+//        }
+//    }
 
-    public class areaSpinnerSelectedListener implements AdapterView.OnItemSelectedListener {
-        public void onItemSelected(AdapterView parent, View view, int position, long id) {
-            // Spinner を取得
-            Spinner spinner = (Spinner) parent;
-            // 選択されたアイテムのテキストを取得
-            String str = spinner.getSelectedItem().toString();
-            if (!str.equals("")) {
-                new AlertDialog.Builder(view.getContext())
-                        .setTitle("ダイアログ")
-                        .setMessage("地域を選択してください")
-                        .setPositiveButton("OK", null)
-                        .show();
-            }
-        }
-
-        // 何も選択されなかった時の動作
-        public void onNothingSelected(AdapterView parent) {
-        }
-    }
-
+    //全項目変更
     private void EditFull( final String pass, final String agetext, final String sextext, final String areatext) {
 
-        //final String name = accounttext;
         final String password = pass;
         final String age = agetext;
         final String sex = sextext;
@@ -348,6 +414,7 @@ public class UserEdit extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             String success = jsonObject.getString("success");
 
+                            //変更が行えていれば
                             if (success.equals("1")) {
                                 Toast.makeText(UserEdit.this, "編集が完了しました", Toast.LENGTH_SHORT).show();
                                 nextPage();
@@ -367,6 +434,7 @@ public class UserEdit extends AppCompatActivity {
                         //    button.setVisibility(View.VISIBLE);
                     }
                 }) {
+            //格納
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 String age2 = String.valueOf(age);
@@ -385,7 +453,7 @@ public class UserEdit extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
-
+    //年齢以外変更
     private void EditNAge(final String pass, final String areatext, final String sextext) {
 
         //final String name = accounttext;
@@ -439,7 +507,7 @@ public class UserEdit extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
-
+    //性別以外変更
     private void EditNSex( final String pass, final String agetext, final String areatext) {
 
         //final String name = accounttext;
@@ -492,7 +560,7 @@ public class UserEdit extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
-
+    //地域以外変更
     private void EditNArea( final String pass, final String agetext,final String sextext) {
 
         //final String name = accounttext;
@@ -542,7 +610,7 @@ public class UserEdit extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
-
+    //年齢とパスワード変更
     private void EditAge( final String pass, final String agetext) {
 
         //final String name = accounttext;
@@ -591,7 +659,7 @@ public class UserEdit extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
-
+    //パスワードと性別変更
     private void EditSex( final String pass, final String sextext) {
 
         //final String name = accounttext;
@@ -640,7 +708,7 @@ public class UserEdit extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
-
+    //パスワードと地域変更
     private void EditArea( final String pass,final String areatext) {
 
         //final String name = accounttext;
@@ -690,7 +758,7 @@ public class UserEdit extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
-
+    //パスワード変更
     private void EditPass( final String pass) {
 
         //final String name = accounttext;
@@ -735,6 +803,42 @@ public class UserEdit extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
+    }
+
+    public void getPref(final String URL) {
+        mQueue = Volley.newRequestQueue(this);;
+        mQueue.add(new JsonObjectRequest(Request.Method.GET, URL, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try{
+                            //都道府県マスタ取得APIの場合
+                            if(URL.equals(URL_Pref)) {
+                                // JSONのパース
+                                JSONArray jsonArray = response.getJSONArray("pref");
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject Pref_code = jsonArray.getJSONObject(i);
+                                    //String pref_code = Pref_code.getString("pref_code");
+                                    JSONObject Pref_name = jsonArray.getJSONObject(i);
+                                    String pref_name = Pref_name.getString("pref_name");
+                                    //spinnerで何も選択されない時のために空白を挿入
+                                    if(i == 0){
+                                        ad_pref.add("");
+                                    }
+                                    ad_pref.add(pref_name);
+                                }
+                            }
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override public void onErrorResponse(VolleyError error) {
+                        // エラー表示
+                    }
+                }));
     }
 
 }

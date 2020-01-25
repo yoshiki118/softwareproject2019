@@ -157,7 +157,7 @@ public class Withdraw extends AppCompatActivity {
 
     }
 
-    //戻るボタンの実装
+    //アクションバー戻るボタンの実装
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case android.R.id.home:
