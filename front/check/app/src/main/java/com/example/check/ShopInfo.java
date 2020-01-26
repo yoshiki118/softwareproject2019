@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 
 import com.example.check.R;
-import com.example.check.search.ui.main.SectionsPagerAdapter;
+import com.example.check.ui.main.SectionsPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 
