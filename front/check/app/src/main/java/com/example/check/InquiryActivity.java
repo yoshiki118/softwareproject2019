@@ -23,6 +23,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class InquiryActivity extends AppCompatActivity implements TextWatcher {
     private InputMethodManager inputMethodManager;
     private String INQUIRYACTIVITY;
@@ -30,6 +45,7 @@ public class InquiryActivity extends AppCompatActivity implements TextWatcher {
     EditText editText;
     TextView textView;
     String item = null;
+    private static String URL_POST = "http://52.199.105.121/sendmail.php";
 
     // 戻るボタンの処理
     @Override
@@ -83,7 +99,7 @@ public class InquiryActivity extends AppCompatActivity implements TextWatcher {
         //アダプタ設定
         spinner.setAdapter(adapter);
         //選択した項目の取得
-        //item = (String)spinner.getSelectedItem();
+        item = (String)spinner.getSelectedItem();
 
         btn_inquiry_sub.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +110,8 @@ public class InquiryActivity extends AppCompatActivity implements TextWatcher {
                 if (text_count == 0)
                     Toast.makeText(InquiryActivity.this, "お問い合わせ内容が入力されていません", Toast.LENGTH_SHORT).show();
                 if (text_count <= 10) {
-                    Toast.makeText(InquiryActivity.this, "送信しました。\nお問い合わせありがとうございます。", Toast.LENGTH_SHORT).show();
+                    POST(item,text);
+
                     editText.getEditableText().clear();
                 } else {
                     Toast.makeText(InquiryActivity.this, "お問い合わせ内容は10文字以内でお願いします。", Toast.LENGTH_SHORT).show();
@@ -152,6 +169,49 @@ public class InquiryActivity extends AppCompatActivity implements TextWatcher {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void POST(final String item, final String text) {//引数は入力された文字列
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_POST,
+                new Response.Listener<String>() { //URL_LOGINで指定したurlに接続開始
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success = jsonObject.getString("success");
+                            if (success.equals("1")) { //認証に成功するとHomeActivityへ遷移
+                                Toast.makeText(InquiryActivity.this, "送信しました。\nお問い合わせありがとうございます。", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) { //エラー内容をToastで表示
+                            e.printStackTrace();
+
+                            Toast.makeText(InquiryActivity.this, "Error" + e.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() { //エラー内容をToastで表示
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(InquiryActivity.this, "Error" + error.toString(), Toast.LENGTH_SHORT).show();
+
+                    }
+                })
+
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //Mapにデータを格納
+                params.put("item", item);
+                params.put("text" , text);
+                return params;
+
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
 }
