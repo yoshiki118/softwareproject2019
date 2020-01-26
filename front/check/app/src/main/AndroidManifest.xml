@@ -24,6 +24,11 @@
             android:name="com.example.check.Search_result"
             android:label="@string/app_shopinfo">
         </activity>
+
+        <activity
+            android:name="com.example.check.Rest_searchActivity"
+            android:label="@string/app_shopinfo">
+        </activity>
         <activity
             android:name="com.example.check.ShopInfo"
             android:label="@string/app_shopinfo">

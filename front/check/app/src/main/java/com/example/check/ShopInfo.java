@@ -5,6 +5,7 @@ import android.view.MenuItem;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.example.check.R;
 import com.example.check.ui.main.SectionsPagerAdapter;
@@ -15,6 +16,7 @@ import androidx.viewpager.widget.ViewPager;
 public class ShopInfo extends AppCompatActivity {
 
     private String shopId;
+    private String SHOPINFO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,10 @@ public class ShopInfo extends AppCompatActivity {
 
         Intent intent = getIntent();
         shopId = intent.getStringExtra("Id");
+
+        MyApp myApp = (MyApp)this.getApplication();
+        SHOPINFO = myApp.getTestString();
+        Toast.makeText(ShopInfo.this, SHOPINFO, Toast.LENGTH_SHORT).show();
 
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), shopId);

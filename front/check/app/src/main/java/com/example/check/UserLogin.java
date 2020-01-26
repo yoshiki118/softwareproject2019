@@ -31,7 +31,7 @@ import java.util.Map;
 
 //＠＠＠＠＠＠＠ユーザログイン＠＠＠＠＠＠＠＠
 public class UserLogin extends AppCompatActivity {
-    public MyApp Tobasu;
+    public MyApp tobasu;
     private EditText editText;
     private String USERLOGIN;
     private static String URL_REGIST ="http://52.199.105.121/user_login.php";
@@ -57,6 +57,8 @@ public class UserLogin extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        tobasu=(MyApp)this.getApplication();
+
         //**********ログインボタンが押された時の処理は以下の通りです*************→→→
         Button userlogin = (Button)findViewById(R.id.buttonUserLogin);
         userlogin.setOnClickListener(new View.OnClickListener() {
@@ -65,8 +67,10 @@ public class UserLogin extends AppCompatActivity {
                 final EditText idtext = (EditText) findViewById(R.id.editUserID);
                 final EditText passtext = (EditText) findViewById(R.id.editUserPass);
                 String userID = idtext.getText().toString();     // ユーザID入力文字の取得
-                USERLOGIN = userID;
+                //USERLOGIN = userID;
                 String userPassword = passtext.getText().toString();//ユーザパスワード入力文字列の取得
+
+                tobasu.setTestString(userID);
 
                 //ユーザIDかパスワードの欄どちらかが未入力があるか
                 if (userID.length() == 0 || userPassword.length() == 0) {
@@ -113,12 +117,14 @@ public class UserLogin extends AppCompatActivity {
                             String success = jsonObject.getString("success");
                             ////////////////照合が正しく行えた時の処理を以下のif文にて記述////////////////////
                             if (success.equals("1")) {
-                                Toast.makeText(UserLogin.this, "ようこそ！！", Toast.LENGTH_SHORT).show();
-                                final EditText idtext = (EditText) findViewById(R.id.editUserID);
-                                String userID = idtext.getText().toString();     // ユーザID入力文字の取得
-                                USERLOGIN = userID;
+                                //Toast.makeText(UserLogin.this, "ようこそ！！", Toast.LENGTH_SHORT).show();
+                                //final EditText idtext = (EditText) findViewById(R.id.editUserID);
+                                //String userID = idtext.getText().toString();     // ユーザID入力文字の取得
+                                //USERLOGIN = userID;
+
+
                                 Intent intent = new Intent(UserLogin.this, UserTop.class);
-                                intent.putExtra("USERTOP",USERLOGIN);
+//                                intent.putExtra("USERTOP",USERLOGIN);
                                 startActivity(intent);
                                 // nextPage();
                             }

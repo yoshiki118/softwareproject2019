@@ -32,8 +32,12 @@ public class UserTop extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //ログインされたIDを前の画面から受け取る
-        Intent intent = getIntent();
-        USERTOP = intent.getStringExtra("USERTOP");
+//        Intent intent = getIntent();
+//        USERTOP = intent.getStringExtra("USERTOP");
+
+        MyApp myApp = (MyApp)this.getApplication();
+        String USERTOP = myApp.getTestString();
+        Toast.makeText(UserTop.this, USERTOP, Toast.LENGTH_SHORT).show();
 
         //アクションバーに戻るボタンの追加
         ActionBar actionBar = getSupportActionBar();
@@ -86,7 +90,7 @@ public class UserTop extends AppCompatActivity {
 
     //次のページの処理を呼び出す
     public void nextPage(){
-        Intent intent = new Intent(UserTop.this, SearchShop.class);
+        Intent intent = new Intent(UserTop.this, Rest_searchActivity.class);
         intent.putExtra("SEARCHSHOP",USERTOP);      //ログインされたIDを次の画面に渡す
         startActivity(intent);
     }
@@ -98,7 +102,7 @@ public class UserTop extends AppCompatActivity {
     }
     //検索画面の処理を呼び出す
     public void searchPage(){
-        Intent intent = new Intent(UserTop.this, SearchShop.class);
+        Intent intent = new Intent(UserTop.this, Rest_searchActivity.class);
         intent.putExtra("SEARCHSHOP",USERTOP);      //ログインされたIDを次の画面に渡す
         startActivity(intent);
     }

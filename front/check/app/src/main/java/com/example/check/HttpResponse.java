@@ -86,9 +86,12 @@ public class HttpResponse extends AsyncTask<URL, Void, List<ShopList>>{
             /* パース */
             JSONObject jsonObject = new JSONObject(response.toString());
 
+            int j = 100;
+            if(j > jsonObject.getInt("total_hit_count"))j = jsonObject.getInt("total_hit_count");
+            if(j > jsonObject.getInt("hit_per_page"))j = jsonObject.getInt("hit_per_page");
 
             // 検索結果店　を　Listで格納していく
-            for(int i = 0; i < jsonObject.getInt("hit_per_page"); i++){
+            for(int i = 0; i < j; i++){
                 JSONObject res = jsonObject.getJSONArray("rest").getJSONObject(i);
                 JSONObject respr = res.getJSONObject("pr");
                 JSONObject resim = res.getJSONObject("image_url");

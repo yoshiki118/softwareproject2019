@@ -40,8 +40,8 @@ import java.util.Map;
 import java.lang.Object;
 
 public class MyCategoryview extends AppCompatActivity {
-    private static String URL_CatagoryList = "http:/52.199.105.121/u_category_list.php";
-    private static String URL_uCategory_Delete = "http:/52.199.105.121/u_category_delete.php";
+    private static String URL_CatagoryList = "http:/52.199.105.121/U_category_list.php";
+    private static String URL_uCategory_Delete = "http:/52.199.105.121/U_category_delete.php";
     //店舗id
     private static String shopid; //= "gc0a608";
     private String MYCATEGORYVIEW;
