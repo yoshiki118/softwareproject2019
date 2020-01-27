@@ -86,7 +86,7 @@ public class HttpResponse extends AsyncTask<URL, Void, List<ShopList>>{
             /* パース */
             JSONObject jsonObject = new JSONObject(response.toString());
 
-            int j = 100;
+            int j = 20;
             if(j > jsonObject.getInt("total_hit_count"))j = jsonObject.getInt("total_hit_count");
             if(j > jsonObject.getInt("hit_per_page"))j = jsonObject.getInt("hit_per_page");
 

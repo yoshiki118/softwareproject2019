@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 
-    private static final String[] TAB_TITLES = new String[]{"TOP", "IMAGE", "INFO","REVIEW"};
+    private static final String[] TAB_TITLES = new String[]{"TOP", "IMAGE", "INFO", "REVIEW"};
     private final Activity mContext;
     private String id;
 
@@ -26,6 +26,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
+        // Return a PlaceholderFragment (defined as a static inner class below).
         return PlaceholderFragment.newInstance(position + 1, this.id, mContext);
     }
 
