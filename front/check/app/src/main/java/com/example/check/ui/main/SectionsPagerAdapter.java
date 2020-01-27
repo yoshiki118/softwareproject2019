@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 
-    private static final String[] TAB_TITLES = new String[]{"TOP", "IMAGE", "INFO", "REVIEW"};
+    private static final String[] TAB_TITLES = new String[]{"TOP", "IMAGE", "INFO", "REVIEW", "CATEGORY"};
     private final Activity mContext;
     private String id;
 
@@ -39,9 +39,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     //タブの個数を取得するget
     @Override
-    public int getCount() {
-        return 4;
-    }
+    public int getCount() { return 5; }
 
     public String getId() {
         return this.id;

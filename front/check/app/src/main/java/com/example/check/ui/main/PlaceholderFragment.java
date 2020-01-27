@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.android.volley.Request;
@@ -51,6 +52,9 @@ public class PlaceholderFragment extends Fragment {
     private PageViewModel pageViewModel;
     private static String mid;
     private static Activity mactivity;
+//    private ArrayAdapter<String> arrayAdapter;
+//    private ListView listt;
+
 
 
     public  static PlaceholderFragment newInstance(int index, String id, Activity activity) {
@@ -82,6 +86,7 @@ public class PlaceholderFragment extends Fragment {
             Bundle savedInstanceState) {
         final View root;
 
+
         if(pageViewModel.getIndex()==1) {
             root = inflater.inflate(R.layout.fragment_top, container, false);
 
@@ -91,6 +96,8 @@ public class PlaceholderFragment extends Fragment {
         }else if(pageViewModel.getIndex()==3){
             root = inflater.inflate(R.layout.fragment_info, container, false);
 
+        }else if(pageViewModel.getIndex()==4){
+            root = inflater.inflate(R.layout.fragment_review, container, false);
         }else {
             root = inflater.inflate(R.layout.fragment_review, container, false);
         }
@@ -120,11 +127,15 @@ public class PlaceholderFragment extends Fragment {
 
                     Parse(s, root);
 
-                }else {
+                }else if (pageViewModel.getIndex() == 4){
 
                     final String url = "http://52.199.105.121/SelectReview.php";
                     getReviews(url, "gc0a608", root);
 
+                }else {
+//                    listt = root.findViewById(R.id.listview);
+//                    arrayAdapter = new ArrayAdapter<>(mactivity, R.layout.list);
+                    getCategories("gc0a608", root);
                 }
             }
         });
@@ -238,6 +249,117 @@ public class PlaceholderFragment extends Fragment {
                             list.setAdapter(adapter);
 
 
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+//                            finish();
+//                            Toast.makeText(Parse.this, "Error" + e.toString(), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(Parse.this, "お知らせはありません", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+//                        finish();
+//                        Toast.makeText(Parse.this, "お知らせはありません", Toast.LENGTH_LONG).show();
+
+                    }
+                })
+
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("shopid", "gc0a608");
+                return params;
+
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(mactivity);
+        requestQueue.add(stringRequest);
+
+    }
+
+//    //サーバにアクセスしユーザが自店舗に付与したカテゴリを取得し,配列に格納
+//    public void getCategories(final String shopid, final View view, final ArrayAdapter<String> arrayAdapter, final ListView listt) {
+//
+//
+//
+//        String URL_CatagoryList = "http:/52.199.105.121/U_category_list.php";
+//        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_CatagoryList,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    //通信成功
+//                    public void onResponse(String response) {
+//                        try {
+//
+//                            //Jsonデータを取得
+//                            JSONObject jsonObject = new JSONObject(response);
+//                            JSONArray count = jsonObject.getJSONArray("category");
+//                            arrayAdapter.clear();
+//                            for (int i = 0; i < count.length(); i++) {
+//                                JSONObject data = count.getJSONObject(i);
+//                                //配列にカテゴリ名を格納
+//                                arrayAdapter.add(data.getString("categoryname"));
+//                                Toast.makeText(mactivity, "Error" + arrayAdapter.getItem(0), Toast.LENGTH_LONG).show();
+//                            }
+//                            listt.setAdapter(arrayAdapter);
+//                            arrayAdapter.notifyDataSetChanged();
+//                            //エラーをToastで表示
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//                },//通信失敗
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        error.printStackTrace();
+//                    }
+//                }) {
+//            @Override
+//            //サーバに送信する文字列を設定
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<>();
+//                //Mapにデータを格納
+//                params.put("shopid", "gc0a608");
+//                return params;
+//
+//            }
+//        };
+//
+//        RequestQueue requestQueue = Volley.newRequestQueue(mactivity);
+//        requestQueue.add(stringRequest);
+//
+//    }
+
+    public void getCategories(final String post, View root) {
+
+        //
+        final String URL = "http:/52.199.105.121/U_category_list.php";
+        final CategoryAdapter adapter = new CategoryAdapter(mactivity);
+        final ListView list = root.findViewById(R.id.list);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            List<String> categorys = new ArrayList<>();
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray jsonArray = jsonObject.getJSONArray("category");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+
+                                JSONObject Category = jsonArray.getJSONObject(i);
+                                String username = Category.getString("categoryname");
+                                categorys.add(username);
+                            }
+                            adapter.setCategoryList(categorys);
+                            list.setAdapter(adapter);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
