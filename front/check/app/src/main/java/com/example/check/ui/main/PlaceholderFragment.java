@@ -88,8 +88,9 @@ public class PlaceholderFragment extends Fragment {
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
-                }else {
+                }else if(pageViewModel.getIndex()==3){
 
+                }else {
                 }
             }
         });
