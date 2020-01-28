@@ -172,31 +172,27 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="60dp"
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
-                <TextView
+                <Button
                     android:id="@+id/textView14"
                     android:layout_width="374dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="ユーザ作成カテゴリ"
+                    android:text=""
                     android:textSize="18sp"
                     android:spinnerMode="dialog"/>
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
-            <LinearLayout
+<!--            <LinearLayout-->
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:orientation="horizontal">
 
-                <Spinner
-                    android:id="@+id/sp_Ucategory"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
+
             </LinearLayout>
 
         </LinearLayout>
