@@ -128,7 +128,7 @@ public class PlaceholderFragment extends Fragment {
                     ImageAdapter adapter = new ImageAdapter(mactivity);
                     final ListView listView = root.findViewById(R.id.list_label);
                     try {
-                        new CoockHttpResponse(root, adapter, listView).execute(new URL("https://api.gnavi.co.jp/PhotoSearchAPI/v3/?keyid=85d315b3b18c6c8a69c7f0bb5f8023f9&shop_id=" +"g787501"));
+                        new CoockHttpResponse(root, adapter, listView).execute(new URL("https://api.gnavi.co.jp/PhotoSearchAPI/v3/?keyid=85d315b3b18c6c8a69c7f0bb5f8023f9&shop_id=" + s));
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
@@ -215,7 +215,7 @@ public class PlaceholderFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("shopid", "gc0a608");
+                params.put("shopid", shopid);
                 return params;
 
             }
@@ -289,7 +289,7 @@ public class PlaceholderFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("shopid", "gc0a608");
+                params.put("shopid", post);
                 return params;
 
             }
@@ -348,7 +348,7 @@ public class PlaceholderFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("shopid", "gc0a608");
+                params.put("shopid", post);
                 return params;
 
             }
