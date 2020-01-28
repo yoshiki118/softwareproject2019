@@ -15,6 +15,7 @@ public class PageViewModel extends ViewModel {
     private int index;
 
     private MutableLiveData<Integer> mIndex = new MutableLiveData<>();
+
     private LiveData<String> mText = Transformations.map(mIndex, new Function<Integer, String>() {
         @Override
         public String apply(Integer input) {
@@ -37,6 +38,5 @@ public class PageViewModel extends ViewModel {
     public void setId(String id){
         this.id = id;
     }
-
 
 }

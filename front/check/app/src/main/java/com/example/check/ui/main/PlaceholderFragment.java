@@ -1,6 +1,7 @@
 package com.example.check.ui.main;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.check.EditReview;
 import com.example.check.R;
 
 import java.net.MalformedURLException;
@@ -28,12 +30,15 @@ import java.util.ListIterator;
 import java.util.Map;
 
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.check.ShopInfo;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,10 +57,9 @@ public class PlaceholderFragment extends Fragment {
     private PageViewModel pageViewModel;
     private static String mid;
     private static Activity mactivity;
+    private Button button;
 //    private ArrayAdapter<String> arrayAdapter;
 //    private ListView listt;
-
-
 
     public  static PlaceholderFragment newInstance(int index, String id, Activity activity) {
         PlaceholderFragment fragment = new PlaceholderFragment();
@@ -78,7 +82,10 @@ public class PlaceholderFragment extends Fragment {
         pageViewModel.setIndex(index);
         pageViewModel.setId(this.mid);
 
+
     }
+
+
 
     @Override
     public View onCreateView(
@@ -98,14 +105,16 @@ public class PlaceholderFragment extends Fragment {
 
         }else if(pageViewModel.getIndex()==4){
             root = inflater.inflate(R.layout.fragment_review, container, false);
+
+
         }else {
-            root = inflater.inflate(R.layout.fragment_review, container, false);
+            root = inflater.inflate(R.layout.fragment_category, container, false);
         }
 
 
         pageViewModel.getText().observe(this, new Observer<String>() {
             @Override
-            public void onChanged(@Nullable String s) {
+            public void onChanged(@Nullable final String s) {
 
                 if (pageViewModel.getIndex() == 1) {
                     try {
@@ -128,6 +137,15 @@ public class PlaceholderFragment extends Fragment {
                     Parse(s, root);
 
                 }else if (pageViewModel.getIndex() == 4){
+                    button = root.findViewById(R.id.button);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent2 = new Intent(mactivity, EditReview.class);
+                            intent2.putExtra("shopid", s);
+                            startActivity(intent2);
+                        }
+                    });
 
                     final String url = "http://52.199.105.121/SelectReview.php";
                     getReviews(url, "gc0a608", root);
@@ -282,59 +300,7 @@ public class PlaceholderFragment extends Fragment {
 
     }
 
-//    //サーバにアクセスしユーザが自店舗に付与したカテゴリを取得し,配列に格納
-//    public void getCategories(final String shopid, final View view, final ArrayAdapter<String> arrayAdapter, final ListView listt) {
-//
-//
-//
-//        String URL_CatagoryList = "http:/52.199.105.121/U_category_list.php";
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_CatagoryList,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    //通信成功
-//                    public void onResponse(String response) {
-//                        try {
-//
-//                            //Jsonデータを取得
-//                            JSONObject jsonObject = new JSONObject(response);
-//                            JSONArray count = jsonObject.getJSONArray("category");
-//                            arrayAdapter.clear();
-//                            for (int i = 0; i < count.length(); i++) {
-//                                JSONObject data = count.getJSONObject(i);
-//                                //配列にカテゴリ名を格納
-//                                arrayAdapter.add(data.getString("categoryname"));
-//                                Toast.makeText(mactivity, "Error" + arrayAdapter.getItem(0), Toast.LENGTH_LONG).show();
-//                            }
-//                            listt.setAdapter(arrayAdapter);
-//                            arrayAdapter.notifyDataSetChanged();
-//                            //エラーをToastで表示
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                    }
-//                },//通信失敗
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        error.printStackTrace();
-//                    }
-//                }) {
-//            @Override
-//            //サーバに送信する文字列を設定
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<>();
-//                //Mapにデータを格納
-//                params.put("shopid", "gc0a608");
-//                return params;
-//
-//            }
-//        };
-//
-//        RequestQueue requestQueue = Volley.newRequestQueue(mactivity);
-//        requestQueue.add(stringRequest);
-//
-//    }
+
 
     public void getCategories(final String post, View root) {
 

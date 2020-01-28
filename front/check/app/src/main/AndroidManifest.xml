@@ -114,8 +114,12 @@
             android:name=".MyCategoryview"
             android:label="@string/app_mycategoryview"
             android:theme="@style/AppTheme">
+        </activity>
 
-
+        <activity
+            android:name=".EditReview"
+            android:label="レビュー投稿"
+            android:theme="@style/AppTheme">
         </activity>
 
     </application>

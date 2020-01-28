@@ -44,4 +44,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public String getId() {
         return this.id;
     }
+
+    int posit;
+
+    public void setPosit(int posit){ this.posit = posit;}
+    public int getPosit(){
+        return this.posit;}
+
 }
