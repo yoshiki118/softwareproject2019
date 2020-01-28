@@ -41,7 +41,6 @@ public class ShopInfo extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
 
 
-
     }
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){

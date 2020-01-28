@@ -151,8 +151,7 @@ public class PlaceholderFragment extends Fragment {
                     getReviews(url, s, root);
 
                 }else {
-//                    listt = root.findViewById(R.id.listview);
-//                    arrayAdapter = new ArrayAdapter<>(mactivity, R.layout.list);
+
                     getCategories(s, root);
                 }
             }
@@ -226,7 +225,7 @@ public class PlaceholderFragment extends Fragment {
     }
 
 
-    public void getReviews(final String URL, final String post, View root) {
+    public void getReviews(final String URL, final String post, final View root) {
 
         //
         final ReviewAdapter adapter = new ReviewAdapter(mactivity);
@@ -243,6 +242,11 @@ public class PlaceholderFragment extends Fragment {
                             List<ReviewData> reviewList = new ArrayList<>();
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray("review");
+
+                            if(jsonArray.length() == 0){
+                                final TextView not_found = root.findViewById(R.id.notfound);
+                                not_found.setText("まだレビューは投稿されていません");
+                            }
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 ReviewData reviews = new ReviewData();
 
@@ -302,7 +306,7 @@ public class PlaceholderFragment extends Fragment {
 
 
 
-    public void getCategories(final String post, View root) {
+    public void getCategories(final String post, final View root) {
 
         //
         final String URL = "http:/52.199.105.121/U_category_list.php";
@@ -313,11 +317,13 @@ public class PlaceholderFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
                         try {
+
                             List<String> categorys = new ArrayList<>();
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray("category");
+
+
                             for (int i = 0; i < jsonArray.length(); i++) {
 
                                 JSONObject Category = jsonArray.getJSONObject(i);
@@ -328,18 +334,15 @@ public class PlaceholderFragment extends Fragment {
                             list.setAdapter(adapter);
 
                         } catch (JSONException e) {
+                            TextView not_found = root.findViewById(R.id.notfound);
+                            not_found.setText("カテゴリーが見つけられませんでした");
                             e.printStackTrace();
-//                            finish();
-//                            Toast.makeText(Parse.this, "Error" + e.toString(), Toast.LENGTH_LONG).show();
-//                            Toast.makeText(Parse.this, "お知らせはありません", Toast.LENGTH_LONG).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                        finish();
-//                        Toast.makeText(Parse.this, "お知らせはありません", Toast.LENGTH_LONG).show();
 
                     }
                 })
