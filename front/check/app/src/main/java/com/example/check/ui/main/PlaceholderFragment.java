@@ -148,12 +148,12 @@ public class PlaceholderFragment extends Fragment {
                     });
 
                     final String url = "http://52.199.105.121/SelectReview.php";
-                    getReviews(url, "gc0a608", root);
+                    getReviews(url, s, root);
 
                 }else {
 //                    listt = root.findViewById(R.id.listview);
 //                    arrayAdapter = new ArrayAdapter<>(mactivity, R.layout.list);
-                    getCategories("gc0a608", root);
+                    getCategories(s, root);
                 }
             }
         });
