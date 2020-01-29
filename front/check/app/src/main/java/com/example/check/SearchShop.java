@@ -47,6 +47,8 @@ public class SearchShop extends AppCompatActivity {
     private ArrayAdapter<String> ad_cate3;
     private RequestQueue mQueue;
 
+    //private
+
     //shopidを格納
     private ArrayList<String> al_cate1 = new ArrayList<>();
     private ArrayList<String> al_cate2 = new ArrayList<>();
@@ -56,7 +58,7 @@ public class SearchShop extends AppCompatActivity {
     private ArrayList<String> param1 = new ArrayList<>();
     private ArrayList<String> param2 = new ArrayList<>();
     private ArrayList<String> param3 = new ArrayList<>();
-    private String params= "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +94,8 @@ public class SearchShop extends AppCompatActivity {
                 Spinner spinner = (Spinner)parent;
                 //選択した項目の取得
                 String item1 = spinner.getSelectedItem().toString();
-                //Toast.makeText(SearchShop.this,item,Toast.LENGTH_SHORT).show();
+
+
                 ad_cate1.clear();
                 if(position != 0 ) {
                     //データベースから選択した文字から始まるカテゴリ名を取得,spinnerにセット
@@ -114,10 +117,16 @@ public class SearchShop extends AppCompatActivity {
                 Spinner spinner = (Spinner)parent;
                 //選択したカテゴリ名の取得
                 String cate1 = spinner.getSelectedItem().toString();
+
                 if(position != 0 ) {
                     //選択したカテゴリ名を付与されているshopidをarraylistに格納
                     al_cate1 = getShopid(cate1);
+
+                    if(al_cate1 .isEmpty()){
+
+                    }
                 }
+
 
             }
 
@@ -214,59 +223,75 @@ public class SearchShop extends AppCompatActivity {
             public void onClick(View v) {
                 //&id=の出現回数
                 int count_id = 0;
+
+
                 //検索パラメータの作成
-                params ="";
-                param1.clear();
-                param2.clear();
-                param3.clear();
-                param1.add("&id=");
-                param2.add("&id=");
-                param3.add("&id=");
+                StringBuilder params = new StringBuilder();
+
+
                 if (!(al_cate1.isEmpty())) {
-                    for (int i = 0; i < al_cate1.size()-1; i++) {
+                    params.append("&id=");
+                    for (int i = 0; i < al_cate1.size(); i++) {
                         //最後の一つ手前までは","を追加,要素10ごとに"&id="を追加
-                        param1.add(al_cate1.get(i));
+                        params.append(al_cate1.get(i));
+                        count_id++;
                         if (i != 0 && i % 9 == 0) {
-                            param1.add("&id=");
-                        } else if (i != al_cate1.size() - 1) {
-                            param1.add(",");
+                            params.append("&id=");
+                        } else if (i == al_cate1.size()-1) {
+
+                        }else{
+                            params.append(",");
                         }
-                        if("&id=".equals(param1.get(i))) count_id++;
                     }
                 }
 
-                if (!(al_cate2.isEmpty())) {
+
+                if (!(al_cate1.isEmpty())) {
                     for (int i = 0; i < al_cate2.size(); i++) {
-                        if (i != al_cate2.size() - 1) {
-                            params += al_cate2.get(i) + ",";
-                        } else {
-                            params += al_cate2.get(i);
+                        if(count_id==10){ break;}
+                        else if(i==0){ params.append(",");}
+
+                        //最後の一つ手前までは","を追加,要素10ごとに"&id="を追加
+                        params.append(al_cate2.get(i));
+                        count_id++;
+                        if (i != 0 && i % 9 == 0) {
+                            params.append("&id=");
+                        } else if (i == al_cate2.size()-1) {
+
+                        }else{
+                            params.append(",");
                         }
                     }
                 }
+
                 if (!(al_cate3.isEmpty())) {
                     for (int i = 0; i < al_cate3.size(); i++) {
-                        if (i != al_cate3.size() - 1) {
-                            params += al_cate3.get(i) + ",";
-                        } else {
-                            params += al_cate3.get(i);
+                        if(count_id==10){ break;}
+                        else if(i==0){ params.append(",");}
+                        //最後の一つ手前までは","を追加,要素10ごとに"&id="を追加
+                        params.append(al_cate3.get(i));
+                        count_id++;
+                        if (i != 0 && i % 9 == 0) {
+                            params.append("&id=");
+                        } else if (i == al_cate3.size()-1) {
+
+                        }else{
+                            params.append(",");
                         }
                     }
                 }
-                for (int i = 0; i < 10/*param1.size()-1*/; i++){
-                    params += param1.get(i);
-                }
 
-//                Intent intent = new Intent(getApplication(), Search_result.class);
-//                intent.putExtra("para", params);
-//                startActivity(intent);
-                //検索結果画面
                 Intent intent = new Intent(getApplication(), Search_result.class);
-                intent.putExtra(EXTRA_DATA, params);
+                intent.putExtra("str", String.valueOf(params));
                 //検索結果画面に遷移
                 startActivity(intent);
 
-                //Toast.makeText(SearchShop.this, params, Toast.LENGTH_LONG).show();
+
+                Toast.makeText(SearchShop.this, params, Toast.LENGTH_LONG).show();
+                params.delete(0, params.length());
+                al_cate1.clear();
+                al_cate2.clear();
+                al_cate3.clear();
 
             }
         });
@@ -274,50 +299,50 @@ public class SearchShop extends AppCompatActivity {
     //item1:五十音選択で選択された文字
     public void getCategory1(final String item1) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_CatagoryList,
-        new Response.Listener<String>() {
-            @Override
-            //通信成功
-            public void onResponse(String response) {
-                try {
-                    //Jsonデータを取得
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONArray count = jsonObject.getJSONArray("category");
-                    for (int i = 0; i < count.length(); i++) {
-                        JSONObject data = count.getJSONObject(i);
-                        //spinnerで何も選択されない時のために空白を挿入
-                        if(i == 0) ad_cate1.add("");
-                        //アダプターにセット
-                        String str = data.getString("name");
-                        //Toast.makeText(SearchShop.this,str,Toast.LENGTH_SHORT).show();
-                        ad_cate1.add(data.getString("name"));
+                new Response.Listener<String>() {
+                    @Override
+                    //通信成功
+                    public void onResponse(String response) {
+                        try {
+                            //Jsonデータを取得
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray count = jsonObject.getJSONArray("category");
+                            for (int i = 0; i < count.length(); i++) {
+                                JSONObject data = count.getJSONObject(i);
+                                //spinnerで何も選択されない時のために空白を挿入
+                                if(i == 0) ad_cate1.add("");
+                                //アダプターにセット
+                                String str = data.getString("name");
+                                //Toast.makeText(SearchShop.this,str,Toast.LENGTH_SHORT).show();
+                                ad_cate1.add(data.getString("name"));
+                            }
+                            //エラーをToastで表示
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
-                    //エラーをToastで表示
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                },//通信失敗
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        Toast.makeText(SearchShop.this, "通信に失敗しました。" + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            //サーバに送信する文字列を設定
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //Mapにデータを格納
+                params.put("char", item1);
+                return params;
 
             }
-            },//通信失敗
-                new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                    Toast.makeText(SearchShop.this, "通信に失敗しました。" + error.toString(), Toast.LENGTH_SHORT).show();
-                }
-        }) {
-                @Override
-                //サーバに送信する文字列を設定
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<>();
-                    //Mapにデータを格納
-                    params.put("char", item1);
-                    return params;
-
-                }
-            };
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            requestQueue.add(stringRequest);
-        }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
     //item2:五十音選択で選択された文字
     public void getCategory2(final String item2) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_CatagoryList,
@@ -414,50 +439,51 @@ public class SearchShop extends AppCompatActivity {
     }
     public ArrayList<String> getShopid(final String cate){
         final ArrayList<String> arrayList = new ArrayList<String>();
-         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_catagorylist,
-                 new Response.Listener<String>() {
-                     @Override
-                     //通信成功
-                     public void onResponse(String response) {
-                         try {
-                             //Jsonデータを取得
-                             JSONObject jsonObject = new JSONObject(response);
-                             JSONArray count = jsonObject.getJSONArray("SHOPID");
-                             for (int i = 0; i < count.length(); i++) {
-                                 JSONObject data = count.getJSONObject(i);
-                                 //アダプターにセット
-                                 String str = data.getString("shopid");
-                                 arrayList.add(str);
-                                 //Toast.makeText(SearchShop.this,arrayList.get(i),Toast.LENGTH_SHORT).show();
-                             }
-                             //エラーをToastで表示
-                         } catch (JSONException e) {
-                             e.printStackTrace();
-                         }
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_catagorylist,
+                new Response.Listener<String>() {
+                    @Override
+                    //通信成功
+                    public void onResponse(String response) {
+                        try {
+                            //Jsonデータを取得
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray count = jsonObject.getJSONArray("SHOPID");
+                            for (int i = 0; i < count.length(); i++) {
+                                JSONObject data = count.getJSONObject(i);
+                                //アダプターにセット
+                                String str = data.getString("shopid");
+                                arrayList.add(str);
+                                //Toast.makeText(SearchShop.this,arrayList.get(i),Toast.LENGTH_SHORT).show();
+                            }
+                            //エラーをToastで表示
+                        } catch (JSONException e) {
+                            //Toast.makeText(SearchShop.this, "bb",Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        }
 
-                     }
-                 },//通信失敗
-                 new Response.ErrorListener() {
-                     @Override
-                     public void onErrorResponse(VolleyError error) {
-                         error.printStackTrace();
-                         Toast.makeText(SearchShop.this, "通信に失敗しました。" + error.toString(), Toast.LENGTH_SHORT).show();
-                     }
-                 }) {
-             @Override
-             //サーバに送信する文字列を設定
-             protected Map<String, String> getParams() throws AuthFailureError {
-                 Map<String, String> params = new HashMap<>();
-                 //Mapにデータを格納
-                 params.put("str", cate);
-                 return params;
+                    }
+                },//通信失敗
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        Toast.makeText(SearchShop.this, "通信に失敗しました。" + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            //サーバに送信する文字列を設定
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //Mapにデータを格納
+                params.put("str", cate);
+                return params;
 
-             }
-         };
-         RequestQueue requestQueue = Volley.newRequestQueue(this);
-         requestQueue.add(stringRequest);
-         return arrayList;
-     }
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+        return arrayList;
+    }
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case android.R.id.home:
