@@ -116,6 +116,12 @@
             android:theme="@style/AppTheme">
         </activity>
 
+
+        <activity
+            android:name=".CreateCategory"
+            android:label="カテゴリ作成"
+            android:theme="@style/AppTheme">
+        </activity>
         <activity
             android:name=".EditReview"
             android:label="レビュー投稿"

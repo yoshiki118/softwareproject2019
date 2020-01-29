@@ -16,7 +16,9 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.check.CreateCategory;
 import com.example.check.EditReview;
+import com.example.check.MyApp;
 import com.example.check.R;
 
 import java.net.MalformedURLException;
@@ -29,9 +31,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -54,13 +58,13 @@ public class PlaceholderFragment extends Fragment {
 
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-
     private PageViewModel pageViewModel;
     private static String mid;
     private static Activity mactivity;
     private Button button;
-//    private ArrayAdapter<String> arrayAdapter;
-//    private ListView listt;
+    private Spinner spinner;
+    private ArrayAdapter<String> ad_mycate;
+    private String item;
 
     public  static PlaceholderFragment newInstance(int index, String id, Activity activity) {
         PlaceholderFragment fragment = new PlaceholderFragment();
@@ -107,7 +111,6 @@ public class PlaceholderFragment extends Fragment {
         }else if(pageViewModel.getIndex()==4){
             root = inflater.inflate(R.layout.fragment_review, container, false);
 
-
         }else {
             root = inflater.inflate(R.layout.fragment_category, container, false);
         }
@@ -152,12 +155,41 @@ public class PlaceholderFragment extends Fragment {
                     getReviews(url, s, root);
 
                 }else {
+                    MyApp myApp = (MyApp)mactivity.getApplication();
+                    String username = myApp.getTestString();
 
                     getCategories(s, root);
+                    getmyCategory(username,root);
+                    button = root.findViewById(R.id.btn_cate);
+                    spinner = root.findViewById(R.id.sp_cate);
+
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(item.equals("新規作成")) {
+                                Intent intent = new Intent(mactivity, CreateCategory.class);
+                                intent.putExtra("Id", s);
+                                startActivity(intent);
+                            }
+                        }
+                    });
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            Spinner spinner = (Spinner)parent;
+                            //選択した項目の取得
+                            item = spinner.getSelectedItem().toString();
+                            Toast.makeText(mactivity,item,Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
                 }
             }
         });
-
         return root;
     }
 
@@ -412,6 +444,60 @@ public class PlaceholderFragment extends Fragment {
         };
         RequestQueue requestQueue = Volley.newRequestQueue(mactivity);
         requestQueue.add(stringRequest);
+    }
+
+    public void getmyCategory(final String username, final View root) {
+        final String URL = "http:/52.199.105.121/mycategory.php";
+
+        final Spinner spinner = (Spinner) root.findViewById(R.id.sp_cate);
+
+        final ArrayAdapter<String> ad_mycate = new ArrayAdapter<String>(mactivity,android.R.layout.simple_spinner_item);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            ad_mycate.add("----------------------");
+                            ad_mycate.add("新規作成");
+
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray count = jsonObject.getJSONArray("category");
+                            for (int i = 0; i < count.length(); i++) {
+                                JSONObject data = count.getJSONObject(i);
+                                String name = data.getString("categoryname");
+                                ad_mycate.add(name);
+                                // Toast.makeText(mactivity,ad_mycate.getItem(i),Toast.LENGTH_SHORT).show();
+                            }
+                            spinner.setAdapter(ad_mycate);
+
+                            ad_mycate.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+                        } catch (JSONException e) {
+
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                })
+
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", username);
+                return params;
+
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(mactivity);
+        requestQueue.add(stringRequest);
+
     }
 }
 
