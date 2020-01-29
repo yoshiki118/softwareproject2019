@@ -1,287 +1,469 @@
 package com.example.check;
+
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.example.check.Rest_searchActivity.EXTRA_DATA;
 
 public class SearchShop extends AppCompatActivity {
-private String SEARCHSHOP;
+    //店舗id
+    private static String shopid = "gc0a608";
+    //接続url
+    private static String URL_CatagoryList = "http:/52.199.105.121/CategoryList.php";
+    //接続url
+    private static String URL_catagorylist = "http:/52.199.105.121/categorylist.php";
+    //category1のアダプタ
+    private ArrayAdapter<String> ad_cate1;
+    //category2のアダプタ
+    private ArrayAdapter<String> ad_cate2;
+    //category3のアダプタ
+    private ArrayAdapter<String> ad_cate3;
+    private RequestQueue mQueue;
 
-    private EditText searchText;
+    //shopidを格納
+    private ArrayList<String> al_cate1 = new ArrayList<>();
+    private ArrayList<String> al_cate2 = new ArrayList<>();
+    private ArrayList<String> al_cate3 = new ArrayList<>();
 
-    // 戻るボタンの処理
+    //検索パラメータ
+    private ArrayList<String> param1 = new ArrayList<>();
+    private ArrayList<String> param2 = new ArrayList<>();
+    private ArrayList<String> param3 = new ArrayList<>();
+    private String params= "";
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK) {
-            // 戻るボタンの処理
-            Intent intent = new Intent(SearchShop.this, UserTop.class);
-            intent.putExtra("USERTOP",SEARCHSHOP);
-            finish();
-            return super.onKeyDown(keyCode, event);
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
-    }
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //アクションバーに戻るボタンを実装
+        setContentView(R.layout.search_shop);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        printSearchShop();
+        //検索ボタン
+        Button searchButton = findViewById(R.id.searchButton);
 
-        //受け取る
-        Intent intent = getIntent();
-        SEARCHSHOP = intent.getStringExtra("SEARCHSHOP");
+        //五十音のspinner
+        Spinner sp_1 = (Spinner)findViewById(R.id.sp_1);
+        //五十音のspinner
+        Spinner sp_2 = (Spinner)findViewById(R.id.sp_2);
+        //五十音のspinner
+        Spinner sp_3 = (Spinner)findViewById(R.id.sp_3);
 
-        initSpinners1();
-        //ユーザトップアイコンの準備
-        ImageButton homeIcon = (ImageButton)findViewById(R.id.homeIcon);
-        homeIcon.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                   homePage();
+        //category1のspinner
+        final Spinner sp_cate1 = (Spinner)findViewById(R.id.category1);
+        //category2のspinner
+        final Spinner sp_cate2 = (Spinner)findViewById(R.id.category2);
+        //category3のspinner
+        final Spinner sp_cate3 = (Spinner)findViewById(R.id.category3);
+
+        //アダプタ
+        ad_cate1 = new ArrayAdapter<String>(SearchShop.this, android.R.layout.simple_spinner_item);
+        ad_cate2 = new ArrayAdapter<String>(SearchShop.this, android.R.layout.simple_spinner_item);
+        ad_cate3 = new ArrayAdapter<String>(SearchShop.this, android.R.layout.simple_spinner_item);
+
+        //五十音のリスナーを登録
+        sp_1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Spinner spinner = (Spinner)parent;
+                //選択した項目の取得
+                String item1 = spinner.getSelectedItem().toString();
+                //Toast.makeText(SearchShop.this,item,Toast.LENGTH_SHORT).show();
+                ad_cate1.clear();
+                if(position != 0 ) {
+                    //データベースから選択した文字から始まるカテゴリ名を取得,spinnerにセット
+                    getCategory1(item1);
+                    sp_cate1.setAdapter(ad_cate1);
+                    ad_cate1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
-        //検索アイコンの準備
-        ImageButton searchIcon = (ImageButton)findViewById(R.id.searchIcon);
-        searchIcon.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                searchPage();
+        //カテゴリ1のリスナーを登録
+        sp_cate1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Spinner spinner = (Spinner)parent;
+                //選択したカテゴリ名の取得
+                String cate1 = spinner.getSelectedItem().toString();
+                if(position != 0 ) {
+                    //選択したカテゴリ名を付与されているshopidをarraylistに格納
+                    al_cate1 = getShopid(cate1);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
-        //マイページアイコンの準備
-        ImageButton myPageIcon = (ImageButton)findViewById(R.id.myPageIcon);
-        myPageIcon.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                myPage();
+        //五十音のリスナーを登録
+        sp_2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Spinner spinner = (Spinner)parent;
+                //選択した項目の取得
+                String item2 = spinner.getSelectedItem().toString();
+                //Toast.makeText(SearchShop.this,item,Toast.LENGTH_SHORT).show();
+                ad_cate2.clear();
+                if(position != 0 ) {
+                    //データベースから選択した文字から始まるカテゴリ名を取得,spinnerにセット
+                    getCategory2(item2);
+                    sp_cate2.setAdapter(ad_cate2);
+                    ad_cate2.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
+        //カテゴリ2のリスナーを登録
+        sp_cate2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Spinner spinner = (Spinner)parent;
+                //選択したカテゴリ名の取得
+                String cate2 = spinner.getSelectedItem().toString();
+                if(position != 0 ) {
+                    //選択したカテゴリ名を付与されているshopidをarraylistに格納
+                    al_cate2 = getShopid(cate2);
+                }
 
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        //五十音のリスナーを登録
+        sp_3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Spinner spinner = (Spinner)parent;
+                //選択した項目の取得
+                String item3 = spinner.getSelectedItem().toString();
+                //Toast.makeText(SearchShop.this,item,Toast.LENGTH_SHORT).show();
+                ad_cate3.clear();
+                if(position != 0 ) {
+                    //データベースから選択した文字から始まるカテゴリ名を取得,spinnerにセット
+                    getCategory3(item3);
+                    sp_cate3.setAdapter(ad_cate3);
+                    ad_cate3.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        //カテゴリ3のリスナーを登録
+        sp_cate3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Spinner spinner = (Spinner)parent;
+                //選択したカテゴリ名の取得
+                String cate3 = spinner.getSelectedItem().toString();
+                if(position != 0 ) {
+                    //選択したカテゴリ名を付与されているshopidをarraylistに格納
+                    al_cate3 = getShopid(cate3);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        //検索ボタンのリスナーを登録
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //&id=の出現回数
+                int count_id = 0;
+                //検索パラメータの作成
+                params ="";
+                param1.clear();
+                param2.clear();
+                param3.clear();
+                param1.add("&id=");
+                param2.add("&id=");
+                param3.add("&id=");
+                if (!(al_cate1.isEmpty())) {
+                    for (int i = 0; i < al_cate1.size()-1; i++) {
+                        //最後の一つ手前までは","を追加,要素10ごとに"&id="を追加
+                        param1.add(al_cate1.get(i));
+                        if (i != 0 && i % 9 == 0) {
+                            param1.add("&id=");
+                        } else if (i != al_cate1.size() - 1) {
+                            param1.add(",");
+                        }
+                        if("&id=".equals(param1.get(i))) count_id++;
+                    }
+                }
+
+                if (!(al_cate2.isEmpty())) {
+                    for (int i = 0; i < al_cate2.size(); i++) {
+                        if (i != al_cate2.size() - 1) {
+                            params += al_cate2.get(i) + ",";
+                        } else {
+                            params += al_cate2.get(i);
+                        }
+                    }
+                }
+                if (!(al_cate3.isEmpty())) {
+                    for (int i = 0; i < al_cate3.size(); i++) {
+                        if (i != al_cate3.size() - 1) {
+                            params += al_cate3.get(i) + ",";
+                        } else {
+                            params += al_cate3.get(i);
+                        }
+                    }
+                }
+                for (int i = 0; i < 10/*param1.size()-1*/; i++){
+                    params += param1.get(i);
+                }
+
+//                Intent intent = new Intent(getApplication(), Search_result.class);
+//                intent.putExtra("para", params);
+//                startActivity(intent);
+                //検索結果画面
+                Intent intent = new Intent(getApplication(), Search_result.class);
+                intent.putExtra(EXTRA_DATA, params);
+                //検索結果画面に遷移
+                startActivity(intent);
+
+                //Toast.makeText(SearchShop.this, params, Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
+    //item1:五十音選択で選択された文字
+    public void getCategory1(final String item1) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_CatagoryList,
+        new Response.Listener<String>() {
+            @Override
+            //通信成功
+            public void onResponse(String response) {
+                try {
+                    //Jsonデータを取得
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray count = jsonObject.getJSONArray("category");
+                    for (int i = 0; i < count.length(); i++) {
+                        JSONObject data = count.getJSONObject(i);
+                        //spinnerで何も選択されない時のために空白を挿入
+                        if(i == 0) ad_cate1.add("");
+                        //アダプターにセット
+                        String str = data.getString("name");
+                        //Toast.makeText(SearchShop.this,str,Toast.LENGTH_SHORT).show();
+                        ad_cate1.add(data.getString("name"));
+                    }
+                    //エラーをToastで表示
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
+            }
+            },//通信失敗
+                new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    Toast.makeText(SearchShop.this, "通信に失敗しました。" + error.toString(), Toast.LENGTH_SHORT).show();
+                }
+        }) {
+                @Override
+                //サーバに送信する文字列を設定
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    //Mapにデータを格納
+                    params.put("char", item1);
+                    return params;
 
-    public void printSearchShop(){
-        setContentView(R.layout.search_shop);
-        //画像の呼び出し
-        ImageView imageView2 = findViewById(R.id.imageView);
-    }
-    //ユーザトップ画面の処理の呼び出し
-    public void homePage(){
-        Intent home = new Intent(SearchShop.this, UserTop.class);
-        startActivity(home);
-    }
-    //検索画面の処理の呼び出し
-    public void searchPage(){
-        Intent search = new Intent(SearchShop.this, SearchShop.class);
-        startActivity(search);
-    }
-    //マイページ画面の処理の呼び出し
-    public void myPage(){
-        Intent myPage = new Intent(SearchShop.this, MyPage.class);
-        startActivity(myPage);
-    }
-
-//spinnerの値をリアルタイムで取得
-    private void initSpinners1(){
-        Spinner genrespinner1 = (Spinner)findViewById(R.id.genrespinner1);
-        Spinner genrespinner2 = (Spinner)findViewById(R.id.genrespinner2);
-        Spinner genrespinner3 = (Spinner)findViewById(R.id.genrespinner3);
-        Spinner statespinner = (Spinner)findViewById(R.id.statespinner);
-        String[] labels = getResources().getStringArray(R.array.genre);
-        ArrayAdapter<String> adapter
-                = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, labels);
-
-        String[] statelabels = getResources().getStringArray(R.array.area);
-        ArrayAdapter<String> stateadapter
-                = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, statelabels);
-        statespinner.setAdapter(stateadapter);
-        genrespinner1.setAdapter(adapter);
-        genrespinner2.setAdapter(adapter);
-        genrespinner3.setAdapter(adapter);
-
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        stateadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//カテゴリジャンル1の内容取得
-        genrespinner1.setOnItemSelectedListener(new SpinnerSelectedListener1());
-        //カテゴリジャンル2の内容取得
-        genrespinner2.setOnItemSelectedListener(new SpinnerSelectedListener2());
-        //カテゴリジャンル3の内容取得
-        genrespinner3.setOnItemSelectedListener(new SpinnerSelectedListener3());
-        //都道府県の内容取得
-        statespinner.setOnItemSelectedListener(new checkAreaSpinnerSelecetedListener());
-    }
-
-    public class checkAreaSpinnerSelecetedListener implements  AdapterView.OnItemSelectedListener{
-        public void onItemSelected(AdapterView parent,View view, int position, long id){
-            Spinner spinner = (Spinner) parent;
-            String str = spinner.getSelectedItem().toString();
-            Spinner statespinner = (Spinner)findViewById(R.id.cityspinner);
-            stateJudge(str,statespinner);
+                }
+            };
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            requestQueue.add(stringRequest);
         }
-        public  void  onNothingSelected(AdapterView parent){
+    //item2:五十音選択で選択された文字
+    public void getCategory2(final String item2) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_CatagoryList,
+                new Response.Listener<String>() {
+                    @Override
+                    //通信成功
+                    public void onResponse(String response) {
+                        try {
+                            //Jsonデータを取得
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray count = jsonObject.getJSONArray("category");
+                            for (int i = 0; i < count.length(); i++) {
+                                JSONObject data = count.getJSONObject(i);
+                                //spinnerで何も選択されない時のために空白を挿入
+                                if(i == 0) ad_cate2.add("");
+                                //アダプターにセット
+                                String str = data.getString("name");
+                                //Toast.makeText(SearchShop.this,str,Toast.LENGTH_SHORT).show();
+                                ad_cate2.add(data.getString("name"));
+                            }
+                            //エラーをToastで表示
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-        }
+                    }
+                },//通信失敗
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        Toast.makeText(SearchShop.this, "通信に失敗しました。" + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            //サーバに送信する文字列を設定
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //Mapにデータを格納
+                params.put("char", item2);
+                return params;
 
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
-    //カテゴリ1とカテゴリジャンル1の連携
-    public class SpinnerSelectedListener1 implements AdapterView.OnItemSelectedListener{
-        public void onItemSelected(AdapterView parent,View view, int position,long id) {
-            // Spinner を取得
-            Spinner spinner = (Spinner) parent;
-            // 選択されたアイテムのテキストを取得
-            String str = spinner.getSelectedItem().toString();
-//カテゴリ1の内容取得
-            Spinner categoryspinner1 = (Spinner)findViewById(R.id.category1);
-            genreJudge(str,categoryspinner1);
-        }
+    //item3:五十音選択で選択された文字
+    public void getCategory3(final String item3) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_CatagoryList,
+                new Response.Listener<String>() {
+                    @Override
+                    //通信成功
+                    public void onResponse(String response) {
+                        try {
+                            //Jsonデータを取得
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray count = jsonObject.getJSONArray("category");
+                            for (int i = 0; i < count.length(); i++) {
+                                JSONObject data = count.getJSONObject(i);
+                                //spinnerで何も選択されない時のために空白を挿入
+                                if(i == 0) ad_cate3.add("");
+                                //アダプターにセット
+                                String str = data.getString("name");
+                                //Toast.makeText(SearchShop.this,str,Toast.LENGTH_SHORT).show();
+                                ad_cate3.add(data.getString("name"));
+                            }
+                            //エラーをToastで表示
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-        // 何も選択されなかった時の動作
-        public void onNothingSelected(AdapterView parent) {
-        }
+                    }
+                },//通信失敗
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        Toast.makeText(SearchShop.this, "通信に失敗しました。" + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            //サーバに送信する文字列を設定
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //Mapにデータを格納
+                params.put("char", item3);
+                return params;
+
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
-//カテゴリ2とカテゴリジャンル2の連携
-    public class SpinnerSelectedListener2 implements AdapterView.OnItemSelectedListener{
-        public void onItemSelected(AdapterView parent,View view, int position,long id) {
-            // Spinner を取得
-            Spinner spinner = (Spinner) parent;
-            // 選択されたアイテムのテキストを取得
-            String str = spinner.getSelectedItem().toString();
-//カテゴリ2の内容取得
-            Spinner categoryspinner2 = (Spinner)findViewById(R.id.category2);
-            genreJudge(str,categoryspinner2);
-        }
+    public ArrayList<String> getShopid(final String cate){
+        final ArrayList<String> arrayList = new ArrayList<String>();
+         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_catagorylist,
+                 new Response.Listener<String>() {
+                     @Override
+                     //通信成功
+                     public void onResponse(String response) {
+                         try {
+                             //Jsonデータを取得
+                             JSONObject jsonObject = new JSONObject(response);
+                             JSONArray count = jsonObject.getJSONArray("SHOPID");
+                             for (int i = 0; i < count.length(); i++) {
+                                 JSONObject data = count.getJSONObject(i);
+                                 //アダプターにセット
+                                 String str = data.getString("shopid");
+                                 arrayList.add(str);
+                                 //Toast.makeText(SearchShop.this,arrayList.get(i),Toast.LENGTH_SHORT).show();
+                             }
+                             //エラーをToastで表示
+                         } catch (JSONException e) {
+                             e.printStackTrace();
+                         }
 
-        // 何も選択されなかった時の動作
-        public void onNothingSelected(AdapterView parent) {
-        }
-    }
-//カテゴリ3とカテゴリジャンル3の連携
-    public class SpinnerSelectedListener3 implements AdapterView.OnItemSelectedListener{
-        public void onItemSelected(AdapterView parent,View view, int position,long id) {
-            // Spinner を取得
-            Spinner spinner = (Spinner) parent;
-            // 選択されたアイテムのテキストを取得
-            String str = spinner.getSelectedItem().toString();
-//カテゴリ3の選択内容を取得
-            Spinner categoryspinner3 = (Spinner)findViewById(R.id.category3);
-            genreJudge(str,categoryspinner3);
-        }
+                     }
+                 },//通信失敗
+                 new Response.ErrorListener() {
+                     @Override
+                     public void onErrorResponse(VolleyError error) {
+                         error.printStackTrace();
+                         Toast.makeText(SearchShop.this, "通信に失敗しました。" + error.toString(), Toast.LENGTH_SHORT).show();
+                     }
+                 }) {
+             @Override
+             //サーバに送信する文字列を設定
+             protected Map<String, String> getParams() throws AuthFailureError {
+                 Map<String, String> params = new HashMap<>();
+                 //Mapにデータを格納
+                 params.put("str", cate);
+                 return params;
 
-        // 何も選択されなかった時の動作
-        public void onNothingSelected(AdapterView parent) {
-        }
-    }
-    public void stateJudge(String str, Spinner statespinner){
-        switch (str) {
-            case "":
-                NullCategory(statespinner);
-                break;
-            case "北海道":
-                NullCategory(statespinner);
-                break;
-            case "東京":
-                setCityCategory(statespinner);
-                break;
-            case "沖縄":
-                NullCategory(statespinner);
-                break;
-        }
-    }
-
-    //カテゴリジャンルは何が選択されているかの取得
-    public void genreJudge(String str, Spinner categoryspinner){
-        switch (str) {
-            case "":
-                setNullCategory(categoryspinner);
-                break;
-            case "お店":
-                setShopCategory(categoryspinner);
-                break;
-            case "料理":
-                setCuisineCategory(categoryspinner);
-                break;
-            case "雰囲気":
-                setMoodCategory(categoryspinner);
-                break;
-        }
-    }
-//都道府県一覧のspinner呼び出し
-private void setCityCategory(Spinner cityspinner1){
-        //市区町村spinnerの有効化
-    cityspinner1.setEnabled(true);
-    String[] labels = getResources().getStringArray(R.array.city);
-    ArrayAdapter<String> adapter
-            = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, labels);
-    cityspinner1.setAdapter(adapter);
-
-    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-}
-//市区町村spinnerの無効化
-    private void NullCategory(Spinner cityspinner1){
-        cityspinner1.setEnabled(false);
-
-    }
-
-    //ジャンルがお店のカテゴリ一覧のspinner呼び出し
-    private void setShopCategory(Spinner categoryspinner1){
-        String[] labels = getResources().getStringArray(R.array.shopcategory);
-        ArrayAdapter<String> adapter
-                = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, labels);
-        categoryspinner1.setAdapter(adapter);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    }
-//ジャンルが料理のカテゴリ一覧のspinnerの呼び出し
-    private void setCuisineCategory(Spinner categoryspinner1){
-        String[] labels = getResources().getStringArray(R.array.cuisinecategory);
-        ArrayAdapter<String> adapter
-                = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, labels);
-        categoryspinner1.setAdapter(adapter);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    }
-    private void setMoodCategory(Spinner categoryspinner1){
-        String[] labels = getResources().getStringArray(R.array.moodcategory);
-        ArrayAdapter<String> adapter
-                = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, labels);
-        categoryspinner1.setAdapter(adapter);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    }
-    private void setNullCategory(Spinner categoryspinner1){
-        String[] labels = getResources().getStringArray(R.array.nullcategory);
-        ArrayAdapter<String> adapter
-                = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, labels);
-        categoryspinner1.setAdapter(adapter);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    }
-    //戻るボタンの実装
+             }
+         };
+         RequestQueue requestQueue = Volley.newRequestQueue(this);
+         requestQueue.add(stringRequest);
+         return arrayList;
+     }
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case android.R.id.home:
-                Intent intent = new Intent(SearchShop.this, UserTop.class);
-                intent.putExtra("USERTOP",SEARCHSHOP);
                 finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

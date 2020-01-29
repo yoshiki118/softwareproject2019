@@ -93,6 +93,8 @@ public class Rest_searchActivity extends AppCompatActivity {
 
         //検索ボタン
         Button searchButton = findViewById(R.id.searchButton);
+        Button btn_Ucate = findViewById(R.id.textView14);
+
 
         //都道府県のspinner
         Spinner sp_pref = (Spinner)findViewById(R.id.sp_pref);
@@ -104,7 +106,7 @@ public class Rest_searchActivity extends AppCompatActivity {
         Spinner sp_category_s = (Spinner) findViewById(R.id.sp_shogyotai);
 
         //ユーザ作成カテゴリのButton
-        Button sp_Ucategory = findViewById(R.id.textView14);
+        //Button sp_Ucategory = findViewById(R.id.textView14);
 
         //ぐるなびapiから都道府県マスタ取得,格納
         final ArrayList<String> al_pref = getCategory(URL_Pref);
@@ -133,6 +135,16 @@ public class Rest_searchActivity extends AppCompatActivity {
         ad_pref.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         ad_daigyoutai.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         ad_shogyoutai.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        btn_Ucate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplication(), SearchShop.class);
+                //検索結果画面に遷移
+                startActivity(intent);
+
+            }
+        });
         //検索ボタン押下で検索結果画面に遷移、同時にURLの後ろにくっつけるパラメータ(検索条件)を渡す
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
