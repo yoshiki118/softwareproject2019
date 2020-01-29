@@ -65,6 +65,8 @@ public class PlaceholderFragment extends Fragment {
     private Spinner spinner;
     private ArrayAdapter<String> ad_mycate;
     private String item;
+    private ArrayList<String> kanak;
+    private String hurigana;
 
     public  static PlaceholderFragment newInstance(int index, String id, Activity activity) {
         PlaceholderFragment fragment = new PlaceholderFragment();
@@ -156,10 +158,10 @@ public class PlaceholderFragment extends Fragment {
 
                 }else {
                     MyApp myApp = (MyApp)mactivity.getApplication();
-                    String username = myApp.getTestString();
+                    final String username = myApp.getTestString();
 
                     getCategories(s, root);
-                    getmyCategory(username,root);
+                   kanak = getmyCategory(username,root);
                     button = root.findViewById(R.id.btn_cate);
                     spinner = root.findViewById(R.id.sp_cate);
 
@@ -170,6 +172,10 @@ public class PlaceholderFragment extends Fragment {
                                 Intent intent = new Intent(mactivity, CreateCategory.class);
                                 intent.putExtra("Id", s);
                                 startActivity(intent);
+                            }else if(item.equals("----------------------")){
+
+                            }else{
+                                createCategory(item, hurigana, username, s);
                             }
                         }
                     });
@@ -179,6 +185,7 @@ public class PlaceholderFragment extends Fragment {
                             Spinner spinner = (Spinner)parent;
                             //選択した項目の取得
                             item = spinner.getSelectedItem().toString();
+                            hurigana = kanak.get(position);
                             Toast.makeText(mactivity,item,Toast.LENGTH_SHORT).show();
                         }
 
@@ -446,12 +453,13 @@ public class PlaceholderFragment extends Fragment {
         requestQueue.add(stringRequest);
     }
 
-    public void getmyCategory(final String username, final View root) {
+    public ArrayList<String> getmyCategory(final String username, final View root) {
         final String URL = "http:/52.199.105.121/mycategory.php";
 
         final Spinner spinner = (Spinner) root.findViewById(R.id.sp_cate);
 
         final ArrayAdapter<String> ad_mycate = new ArrayAdapter<String>(mactivity,android.R.layout.simple_spinner_item);
+        final ArrayList<String> kanaList = new ArrayList<>();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
                 new Response.Listener<String>() {
                     @Override
@@ -459,18 +467,22 @@ public class PlaceholderFragment extends Fragment {
                         try {
                             ad_mycate.add("----------------------");
                             ad_mycate.add("新規作成");
+                            kanaList.add("");
+                            kanaList.add("");
 
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray count = jsonObject.getJSONArray("category");
                             for (int i = 0; i < count.length(); i++) {
                                 JSONObject data = count.getJSONObject(i);
                                 String name = data.getString("categoryname");
+                                String kana = data.getString("kana");
                                 ad_mycate.add(name);
+                                kanaList.add(kana);
                                 // Toast.makeText(mactivity,ad_mycate.getItem(i),Toast.LENGTH_SHORT).show();
                             }
                             spinner.setAdapter(ad_mycate);
-
                             ad_mycate.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
 
                         } catch (JSONException e) {
 
@@ -490,6 +502,51 @@ public class PlaceholderFragment extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("username", username);
+                return params;
+
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(mactivity);
+        requestQueue.add(stringRequest);
+        return kanaList;
+    }
+
+
+    //カテゴリを作成
+    public void createCategory(final String Cate,final String cate_kana,final String username, final String shopid) {
+        final String URL_Cate = "http:/52.199.105.121/InsertCategory.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Cate,
+                new Response.Listener<String>() {
+                    @Override
+                    //通信成功
+                    public void onResponse(String response) {
+                        try {
+                            //Jsonデータを取得
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success = jsonObject.getString("success");
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },//通信失敗
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }) {
+            @Override
+            //サーバに送信する文字列を設定
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //Mapにデータを格納
+                params.put("categoryname", Cate);
+                params.put("name_kana",cate_kana);
+                params.put("shopid", shopid);
+                params.put("username",username);
                 return params;
 
             }
