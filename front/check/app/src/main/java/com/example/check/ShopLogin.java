@@ -33,18 +33,8 @@ import java.util.Map;
 public class ShopLogin extends AppCompatActivity {
     private static String URL_REGIST ="http://52.199.105.121/shop_login.php";
     private String SHOPLOGIN;
+    public MyApp myapp;
 
-    // 戻るボタンの処理
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK) {
-            // 戻るボタンの処理
-            finish();
-            return super.onKeyDown(keyCode, event);
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +43,8 @@ public class ShopLogin extends AppCompatActivity {
         //アクションバーに戻るボタンを実装
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        myapp=(MyApp)this.getApplication();
 
         //**********ログインボタンが押された時の処理は以下の通りです*************→→→
         Button shoplogin = (Button)findViewById(R.id.buttonShopLogin);
@@ -63,6 +55,8 @@ public class ShopLogin extends AppCompatActivity {
                 final EditText passtext = (EditText) findViewById(R.id.editShopPass);
                 String shopID = idtext.getText().toString();     // 店舗ID入力文字の取得
                 String shopPassword = passtext.getText().toString();//店舗パスワード入力文字列の取得
+
+                myapp.setTestString(shopID);
 
                 if (shopID.length() == 0 || shopPassword.length() == 0) {
                     //店舗IDかパスワードの欄どちらかが未入力があるか
@@ -118,11 +112,7 @@ public class ShopLogin extends AppCompatActivity {
                             if (success.equals("1")) {
                                 Toast.makeText(ShopLogin.this, "ようこそ！！", Toast.LENGTH_SHORT).show();
 //                                Toast.makeText(ShopLogin.this, "Register Success!", Toast.LENGTH_SHORT).show();
-                                final EditText idtext = (EditText) findViewById(R.id.editShopID);
-                                String shopID = idtext.getText().toString();     // ユーザID入力文字の取得
-                                SHOPLOGIN = shopID;
                                 Intent intent = new Intent(ShopLogin.this, ShopHome.class);
-                                intent.putExtra("SHOPHOME",SHOPLOGIN);
                                 startActivity(intent);
                                 // nextPage();
                             }

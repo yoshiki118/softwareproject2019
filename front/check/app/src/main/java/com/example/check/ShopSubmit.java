@@ -40,6 +40,7 @@ public class ShopSubmit extends AppCompatActivity {
     private static String URL_REGIST ="http://52.199.105.121/shop_register.php";
     private Button button;
     private String SHOPSUBMIT;
+    public MyApp myapp;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +49,8 @@ public class ShopSubmit extends AppCompatActivity {
         shopIDText = (EditText) findViewById(R.id.shopIDText);
         shopPassText = (EditText) findViewById(R.id.shopPassText);
         shopPassCheckText = (EditText) findViewById(R.id.shopPassCheckText);
+        //MyApp宣言
+        myapp=(MyApp)this.getApplication();
 
         button = (Button) findViewById(R.id.shopSubmitButton);
         Button cbutton = (Button) findViewById(R.id.shopCancelButton);
@@ -65,7 +68,7 @@ public class ShopSubmit extends AppCompatActivity {
                 final String shoppasslabel = shopPassLabel.getText().toString();
                 final String shoppasschecklabel = shopPassCheckLabel.getText().toString();
 
-
+                myapp.setTestString(shopID);
 
                 errorCheck(v,shopID, shopPass, shopPassCheck, shopIDlabel, shoppasslabel, shoppasschecklabel);
 

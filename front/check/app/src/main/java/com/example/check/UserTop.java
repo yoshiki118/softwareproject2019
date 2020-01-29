@@ -15,19 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 public class UserTop extends AppCompatActivity {
     private String USERTOP;
 
-    // 端末の戻るボタンの処理
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK) {
-            // 戻るボタンの処理
-            Intent intent = new Intent(UserTop.this, UserLogin.class);
-            intent.putExtra("USERLOGIN",USERTOP);
-            finish();
-            return super.onKeyDown(keyCode, event);
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
-    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,9 +22,9 @@ public class UserTop extends AppCompatActivity {
 //        Intent intent = getIntent();
 //        USERTOP = intent.getStringExtra("USERTOP");
 
-        MyApp myApp = (MyApp)this.getApplication();
-        String USERTOP = myApp.getTestString();
-        Toast.makeText(UserTop.this, USERTOP, Toast.LENGTH_SHORT).show();
+//        MyApp myApp = (MyApp)this.getApplication();
+//        String USERTOP = myApp.getTestString();
+//        Toast.makeText(UserTop.this, USERTOP, Toast.LENGTH_SHORT).show();
 
         //アクションバーに戻るボタンの追加
         ActionBar actionBar = getSupportActionBar();
@@ -91,25 +78,21 @@ public class UserTop extends AppCompatActivity {
     //次のページの処理を呼び出す
     public void nextPage(){
         Intent intent = new Intent(UserTop.this, Rest_searchActivity.class);
-        intent.putExtra("SEARCHSHOP",USERTOP);      //ログインされたIDを次の画面に渡す
         startActivity(intent);
     }
     //ユーザトップ画面の処理を呼び出す
     public void homePage(){
         Intent home = new Intent(UserTop.this, UserTop.class);
-        home.putExtra("USERTOP",USERTOP);       //ログインされたIDを次の画面に渡す
         startActivity(home);
     }
     //検索画面の処理を呼び出す
     public void searchPage(){
         Intent intent = new Intent(UserTop.this, Rest_searchActivity.class);
-        intent.putExtra("SEARCHSHOP",USERTOP);      //ログインされたIDを次の画面に渡す
         startActivity(intent);
     }
     //マイページ画面の処理を呼び出す
     public void myPage(){
         Intent myPage = new Intent(UserTop.this, MyPage.class);
-        myPage.putExtra("MYPAGE",USERTOP);      //ログインされたIDを次の画面に渡す
         startActivity(myPage);
     }
     //アクションバー戻るボタンの処理
@@ -117,7 +100,6 @@ public class UserTop extends AppCompatActivity {
         switch (item.getItemId()){
             case android.R.id.home:
                 Intent intent = new Intent(UserTop.this, UserLogin.class);
-                intent.putExtra("USERLOGIN",USERTOP);       //ログインされたIDを前の画面に渡す
                 finish();
                 return true;
         }

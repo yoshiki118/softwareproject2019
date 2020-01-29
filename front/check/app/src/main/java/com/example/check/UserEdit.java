@@ -69,23 +69,13 @@ public class UserEdit extends AppCompatActivity {
     private ArrayAdapter<String> ad_pref;
     private String area;
 
-    // 端末戻るボタンの処理
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent intent = new Intent(UserEdit.this, MyPage.class);
-            intent.putExtra("MYPAGE",USEREDIT); //ログインされたIDを前の画面にわたす
-            finish();
-            return super.onKeyDown(keyCode, event);
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         printUserEdit();
+
+
 
         //地域選択のspinnerの値を取得
         Spinner areaspinner = (Spinner)findViewById(R.id.areaspinner);
@@ -95,9 +85,6 @@ public class UserEdit extends AppCompatActivity {
         getPref(URL_Pref);
         ad_pref.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
-        ////ログインされたIDを前の画面から受け取る
-        Intent intent = getIntent();
-        USEREDIT = intent.getStringExtra("USEREDIT");
 
         //accountNameTextの設定
         accountNameText = findViewById(R.id.accountNameText);
@@ -121,6 +108,9 @@ public class UserEdit extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+
+        MyApp myApp = (MyApp)this.getApplication();
+        USEREDIT = myApp.getTestString();
         //ログインしたアカウント名をセット
         accountNameText.setText(USEREDIT);
 
@@ -330,8 +320,6 @@ public class UserEdit extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(UserEdit.this, MyPage.class);
-                intent.putExtra("MYPAGE",USEREDIT);//ログインされたIDを前の画面にわたす
                 finish();
                 return true;
         }
@@ -345,8 +333,6 @@ public class UserEdit extends AppCompatActivity {
 
     //情報変更完了時のページ遷移・処理
     public void nextPage() {
-        Intent intent = new Intent(UserEdit.this, MyPage.class);
-        intent.putExtra("MYPAGE",USEREDIT);//ログインされたIDを次の画面に渡す
         finish();
     }
 

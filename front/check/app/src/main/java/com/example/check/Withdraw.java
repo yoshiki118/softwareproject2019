@@ -20,19 +20,6 @@ public class Withdraw extends AppCompatActivity {
     private int reasonflag = 0;
     private String WITHDRAW;
 
-    // 戻るボタンの処理
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK) {
-            // 戻るボタンの処理
-            Intent intent = new Intent(Withdraw.this, MyPage.class);
-            intent.putExtra("MYPAGE",WITHDRAW);
-            finish();
-            return super.onKeyDown(keyCode, event);
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +27,8 @@ public class Withdraw extends AppCompatActivity {
         setContentView(R.layout.withdraw);
 
         //受け取る
-        Intent intent = getIntent();
-        WITHDRAW= intent.getStringExtra("WITHDRAW");
+        MyApp myApp = (MyApp)this.getApplication();
+        WITHDRAW = myApp.getTestString();
 
         //アクションバーに戻るボタンを実装
         ActionBar actionBar = getSupportActionBar();
@@ -150,7 +137,6 @@ public class Withdraw extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 Intent intent = new Intent(Withdraw.this, MyPage.class);
-                intent.putExtra("MYPAGE",WITHDRAW);
                 finish();
             }
         });
@@ -162,7 +148,6 @@ public class Withdraw extends AppCompatActivity {
         switch (item.getItemId()){
             case android.R.id.home:
                 Intent intent = new Intent(Withdraw.this, MyPage.class);
-                intent.putExtra("MYPAGE",WITHDRAW);
                 finish();
                 return true;
         }

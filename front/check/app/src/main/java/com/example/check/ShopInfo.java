@@ -29,7 +29,7 @@ public class ShopInfo extends AppCompatActivity {
 
         MyApp myApp = (MyApp)this.getApplication();
         SHOPINFO = myApp.getTestString();
-        Toast.makeText(ShopInfo.this, SHOPINFO, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(ShopInfo.this, SHOPINFO, Toast.LENGTH_SHORT).show();
 
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), shopId);

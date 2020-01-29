@@ -36,16 +36,7 @@ public class UserLogin extends AppCompatActivity {
     private String USERLOGIN;
     private static String URL_REGIST ="http://52.199.105.121/user_login.php";
 
-    // 戻るボタンの処理
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK) {
-            finish();
-            return super.onKeyDown(keyCode, event);
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +108,7 @@ public class UserLogin extends AppCompatActivity {
                             String success = jsonObject.getString("success");
                             ////////////////照合が正しく行えた時の処理を以下のif文にて記述////////////////////
                             if (success.equals("1")) {
-                                //Toast.makeText(UserLogin.this, "ようこそ！！", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UserLogin.this, "ようこそ！！", Toast.LENGTH_SHORT).show();
                                 //final EditText idtext = (EditText) findViewById(R.id.editUserID);
                                 //String userID = idtext.getText().toString();     // ユーザID入力文字の取得
                                 //USERLOGIN = userID;

@@ -49,19 +49,6 @@ public class MyCategoryview extends AppCompatActivity {
     //削除対象
     private String SELECTED_ITEM = null;
 
-    // 戻るボタンの処理
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK) {
-            // 戻るボタンの処理
-            Intent intent = new Intent(MyCategoryview.this, ShopHome.class);
-            intent.putExtra("SHOPHOME",MYCATEGORYVIEW);
-            finish();
-            return super.onKeyDown(keyCode, event);
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,10 +59,9 @@ public class MyCategoryview extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         //受け取る
-        Intent intent = getIntent();
-        MYCATEGORYVIEW = intent.getStringExtra("MYCATEGORYVIEW");
-
-        shopid = MYCATEGORYVIEW;
+        //受け取る
+        MyApp myApp = (MyApp)this.getApplication();
+        shopid = myApp.getTestString();
 
         // itemを表示するTextViewが設定されているlist.xmlを指す
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.list);
@@ -274,8 +260,7 @@ public class MyCategoryview extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case android.R.id.home:
-                Intent intent = new Intent(MyCategoryview.this, ShopHome.class);
-                intent.putExtra("SHOPHOME",MYCATEGORYVIEW);
+                Intent intent = new Intent(MyCategoryview.this, ShopHome.class);intent.putExtra("SHOPHOME",MYCATEGORYVIEW);
                 finish();
                 return true;
         }

@@ -156,7 +156,7 @@ public class Rest_searchActivity extends AppCompatActivity {
                 if(!TextUtils.isEmpty(search_text.getText().toString())) name = "&name=" + search_text.getText().toString();
                 //検索結果画面に渡すデータ
                 String Add = pref + areacode_s + category_l + category_s + name;
-                Toast.makeText(Rest_searchActivity.this,Add,Toast.LENGTH_LONG).show();
+                //Toast.makeText(Rest_searchActivity.this,Add,Toast.LENGTH_LONG).show();
 
                     //検索結果画面
                     Intent intent = new Intent(getApplication(), Search_result.class);

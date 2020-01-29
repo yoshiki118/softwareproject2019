@@ -64,6 +64,8 @@ public class UserSubmit extends AppCompatActivity {
     private ArrayAdapter<String> ad_pref;
     private String area;
 
+    public MyApp myapp;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         printUserSubmit();
@@ -95,6 +97,8 @@ public class UserSubmit extends AppCompatActivity {
         //++++++++++++++++++アクションバーに戻るボタンを実装+++++++++++++++++++++
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        myapp=(MyApp)this.getApplication();
 
         //以下データ
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.sex);
@@ -236,6 +240,7 @@ public class UserSubmit extends AppCompatActivity {
                 }
                 //入力内容すべてが問題なければ次のエラーチェックへ
                 if (accountflag == 1 && passflag == 1 && passcheckflag == 1 && equalflag == 1 && ageflag == 1 && sexflag == 1 && areaflag == 1){
+                    myapp.setTestString(accounttext);
                     Regist(accounttext, Passtext, agetext, sextext, area);
 //                    nextPage();
                 }
@@ -348,7 +353,7 @@ public class UserSubmit extends AppCompatActivity {
                             String success = jsonObject.getString("success");
 
                             if (success.equals("1")) {
-                                Toast.makeText(UserSubmit.this, "Register Success!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UserSubmit.this, "ようこそ！！", Toast.LENGTH_SHORT).show();
                                 nextPage();
                             }
 

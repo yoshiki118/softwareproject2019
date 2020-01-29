@@ -4,7 +4,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -50,20 +52,6 @@ public class EditInfo extends AppCompatActivity implements TextWatcher {
     TextView textView;
     String item = null;
 
-    // 戻るボタンの処理
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK) {
-            // 戻るボタンの処理
-            Intent intent = new Intent(EditInfo.this, ShopHome.class);
-            intent.putExtra("SHOPHOME",EDITINFO);
-            finish();
-            return super.onKeyDown(keyCode, event);
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,8 +61,8 @@ public class EditInfo extends AppCompatActivity implements TextWatcher {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         //受け取る
-        Intent intent = getIntent();
-        EDITINFO = intent.getStringExtra("EDITINFO");
+        MyApp myApp = (MyApp)this.getApplication();
+        EDITINFO = myApp.getTestString();
 
         //送信ボタン
         Button btn_inquiry_sub = findViewById(R.id.btn_sub);
@@ -95,13 +83,32 @@ public class EditInfo extends AppCompatActivity implements TextWatcher {
                 //入力文字
                 String text = editText.getText().toString();
                 int text_count = text.length();
-                if (text_count == 0)
-                    Toast.makeText(EditInfo.this, "お知らせが入力されていません", Toast.LENGTH_SHORT).show();
+                if (text_count == 0){
+                    new AlertDialog.Builder(v.getContext())
+                            .setTitle("エラー")
+                            .setMessage("おしらせを入力してください")
+                            .setPositiveButton("OK", null)
+                            .show();
+                }
                 else if (text_count <= 200) {
                     post(text,EDITINFO);
-                    finish();
+                    new AlertDialog.Builder(v.getContext())
+                            .setTitle("登録完了")
+                            .setMessage("変更しました")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                //OKを押すと元の画面に戻る
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            })
+                            .show();
                 } else {
-                    Toast.makeText(EditInfo.this, "お知らせは200文字以内でお願いします。", Toast.LENGTH_SHORT).show();
+                    new AlertDialog.Builder(v.getContext())
+                            .setTitle("エラー")
+                            .setMessage("お知らせは200文字以内でお願いします")
+                            .setPositiveButton("OK", null)
+                            .show();
                 }
             }
 
@@ -193,7 +200,6 @@ public class EditInfo extends AppCompatActivity implements TextWatcher {
         switch (item.getItemId()){
             case android.R.id.home:
                 Intent intent = new Intent(EditInfo.this, ShopHome.class);
-                intent.putExtra("SHOPHOME",EDITINFO);
                 finish();
                 return true;
         }

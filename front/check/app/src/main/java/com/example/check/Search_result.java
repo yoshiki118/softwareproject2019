@@ -34,7 +34,7 @@ public class Search_result extends AppCompatActivity implements AdapterView.OnIt
         //検索画面からパラメータを受け取りparamsに格納
         Intent intent = getIntent();
         params = intent.getStringExtra(Rest_searchActivity.EXTRA_DATA);
-        Toast.makeText(Search_result.this,params,Toast.LENGTH_LONG).show();
+        //Toast.makeText(Search_result.this,params,Toast.LENGTH_LONG).show();
         ListView listView = findViewById(R.id.list_view);
         listView.setOnItemClickListener(this);
 

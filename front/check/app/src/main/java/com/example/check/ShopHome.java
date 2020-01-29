@@ -15,19 +15,6 @@ public class ShopHome extends AppCompatActivity {
     private String SHOPHOME;
 
 
-    // 戻るボタンの処理
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK) {
-            // 戻るボタンの処理
-            Intent intent = new Intent(ShopHome.this, ShopLogin.class);
-            intent.putExtra("SHOPLOGIN",SHOPHOME);
-            finish();
-            return super.onKeyDown(keyCode, event);
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +24,8 @@ public class ShopHome extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         //受け取る
-        Intent intent = getIntent();
-        SHOPHOME = intent.getStringExtra("SHOPHOME");
+//        Intent intent = getIntent();
+//        SHOPHOME = intent.getStringExtra("SHOPHOME");
 
         //************ユーザカテゴリ編集への遷移************
         //「buttonuser」が押された時の処理は以下の通りです→→→→→→
@@ -48,7 +35,6 @@ public class ShopHome extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ShopHome.this, MyCategoryview.class);
-                intent.putExtra("MYCATEGORYVIEW",SHOPHOME);
                 startActivity(intent);
             }
         });
@@ -63,7 +49,6 @@ public class ShopHome extends AppCompatActivity {
             public void onClick(View view) {
 //                Intent intent = new Intent(ShopHome.this, ShopNoitice.class);
                 Intent intent = new Intent(ShopHome.this, EditInfo.class);
-                intent.putExtra("EDITINFO",SHOPHOME);
                 //遷移テスト
                 startActivity(intent);
             }
@@ -75,7 +60,6 @@ public class ShopHome extends AppCompatActivity {
         switch (item.getItemId()){
             case android.R.id.home:
                 Intent intent = new Intent(ShopHome.this, ShopLogin.class);
-                intent.putExtra("SHOPLOGIN",SHOPHOME);
                 finish();
                 return true;
         }

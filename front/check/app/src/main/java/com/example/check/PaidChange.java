@@ -21,20 +21,6 @@ public class PaidChange extends AppCompatActivity {
     private int change = 0;
     private String PAIDCHANGE;
 
-    //戻るボタンの処理
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK) {
-            // 戻るボタンの処理
-            Intent intent = new Intent(PaidChange.this, MyPage.class);
-            intent.putExtra("MYPAGE",PAIDCHANGE);
-            finish();
-            return super.onKeyDown(keyCode, event);
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +28,8 @@ public class PaidChange extends AppCompatActivity {
         setContentView(R.layout.paid_change);
 
         //受け取る
-        Intent intent = getIntent();
-        PAIDCHANGE = intent.getStringExtra("PAIDCHANGE");
+        MyApp myApp = (MyApp)this.getApplication();
+        PAIDCHANGE = myApp.getTestString();
 
         //アクションバーに戻るボタンを実装
         ActionBar actionBar = getSupportActionBar();
@@ -129,7 +115,6 @@ public class PaidChange extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 Intent intent = new Intent(PaidChange.this, MyPage.class);
-                intent.putExtra("MYPAGE",PAIDCHANGE);
                 finish();
             }
         });
@@ -142,7 +127,6 @@ public class PaidChange extends AppCompatActivity {
         switch (item.getItemId()){
             case android.R.id.home:
                 Intent intent = new Intent(PaidChange.this, MyPage.class);
-                intent.putExtra("MYPAGE",PAIDCHANGE);
                 finish();
                 return true;
         }

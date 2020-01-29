@@ -3,7 +3,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -45,29 +47,18 @@ public class InquiryActivity extends AppCompatActivity implements TextWatcher {
     EditText editText;
     TextView textView;
     String item = null;
+    int INQUIRYNUMBER = 200;
     private static String URL_POST = "http://52.199.105.121/sendmail.php";
 
-    // 戻るボタンの処理
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK) {
-            // 戻るボタンの処理
-            Intent intent = new Intent(InquiryActivity.this, MyPage.class);
-            intent.putExtra("MYPAGE",INQUIRYACTIVITY);
-            finish();
-            return super.onKeyDown(keyCode, event);
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inquiry);
 
         //受け取る
-        Intent intent = getIntent();
-        INQUIRYACTIVITY = intent.getStringExtra("INQUIRYACTIVITY");
+        MyApp myApp = (MyApp)this.getApplication();
+        INQUIRYACTIVITY = myApp.getTestString();
+        Toast.makeText(InquiryActivity.this, INQUIRYACTIVITY, Toast.LENGTH_SHORT).show();
 
         //アクションバーに戻るボタンを実装
         ActionBar actionBar = getSupportActionBar();
@@ -107,14 +98,34 @@ public class InquiryActivity extends AppCompatActivity implements TextWatcher {
                 //入力文字
                 String text = editText.getText().toString();
                 int text_count = text.length();
-                if (text_count == 0)
-                    Toast.makeText(InquiryActivity.this, "お問い合わせ内容が入力されていません", Toast.LENGTH_SHORT).show();
-                if (text_count <= 10) {
+                if (text_count == 0){
+                    new AlertDialog.Builder(v.getContext())
+                            .setTitle("エラー")
+                            .setMessage("お問い合わせ内容が入力されていません")
+                            .setPositiveButton("OK", null)
+                            .show();
+                }
+                if (text_count <= INQUIRYNUMBER) {
                     POST(item,text);
-
-                    editText.getEditableText().clear();
+                    new AlertDialog.Builder(v.getContext())
+                            .setTitle("送信完了")
+                            .setMessage("お問い合わせありがとうございます")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                //OKを押すと元の画面に戻る
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            })
+                            .show();
+                    //editText.getEditableText().clear();
                 } else {
-                    Toast.makeText(InquiryActivity.this, "お問い合わせ内容は10文字以内でお願いします。", Toast.LENGTH_SHORT).show();
+                    new AlertDialog.Builder(v.getContext())
+                            .setTitle("エラー")
+                            .setMessage("お問い合わせは"+ INQUIRYNUMBER+"文字以内でお願いします")
+                            .setPositiveButton("OK", null)
+                            .show();
+
                 }
             }
 
@@ -137,7 +148,7 @@ public class InquiryActivity extends AppCompatActivity implements TextWatcher {
         String inputStr = s.toString();
 
         // 文字長をカウントして280文字を超えると「オーバー」とする
-        if(inputStr.length() > 10){
+        if(inputStr.length() > INQUIRYNUMBER){
             String str = " 文字数オーバー";
             textView.setText(str);
             textView.setTextColor(Color.RED);
@@ -164,7 +175,6 @@ public class InquiryActivity extends AppCompatActivity implements TextWatcher {
         switch (item.getItemId()){
             case android.R.id.home:
                 Intent intent = new Intent(InquiryActivity.this, MyPage.class);
-                intent.putExtra("MYPAGE",INQUIRYACTIVITY);
                 finish();
                 return true;
         }
@@ -180,7 +190,7 @@ public class InquiryActivity extends AppCompatActivity implements TextWatcher {
                             JSONObject jsonObject = new JSONObject(response);
                             String success = jsonObject.getString("success");
                             if (success.equals("1")) { //認証に成功するとHomeActivityへ遷移
-                                Toast.makeText(InquiryActivity.this, "送信しました。\nお問い合わせありがとうございます。", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(InquiryActivity.this, "送信しました。\nお問い合わせありがとうございます。", Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) { //エラー内容をToastで表示
