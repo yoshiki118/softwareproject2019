@@ -125,7 +125,7 @@ public class UserSubmit extends AppCompatActivity {
         notequal = "パスワードが一致しません";
         cbutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                setContentView(R.layout.user_login);
+                finish();
             }
         });
 
