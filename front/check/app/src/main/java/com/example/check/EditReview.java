@@ -1,5 +1,7 @@
 package com.example.check;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,7 +53,7 @@ public class EditReview extends AppCompatActivity {
 
         MyApp myApp = (MyApp)this.getApplication();
         username = myApp.getTestString();
-        Toast.makeText(EditReview.this, username, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(EditReview.this, username, Toast.LENGTH_SHORT).show();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -74,13 +76,38 @@ public class EditReview extends AppCompatActivity {
                 String text = editText.getText().toString();
 
                 int text_count = text.length();
-                if (text_count == 0)
-                    Toast.makeText(EditReview.this, "レビューが入力されていません", Toast.LENGTH_SHORT).show();
+                if (text_count == 0) {
+                    new AlertDialog.Builder(v.getContext())
+                            .setTitle("エラー")
+                            .setMessage("レビューの入力がありません")
+                            .setPositiveButton("OK", null)
+                            .show();
+                }
                 else if (text_count <= 500) {
                     post(text, shopid, username);
-                    finish();
+                    new AlertDialog.Builder(v.getContext())
+                            .setTitle("投稿完了")
+                            .setMessage("レビューを投稿しました")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                //OKを押すと元の画面に戻る
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            })
+                            .show();
                 } else {
-                    Toast.makeText(EditReview.this, "レビューは500文字以内でお願いします。", Toast.LENGTH_SHORT).show();
+                    new AlertDialog.Builder(v.getContext())
+                            .setTitle("エラー")
+                            .setMessage("投稿内容は500文字以内でお願いします")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                //OKを押すと元の画面に戻る
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            })
+                            .show();
                 }
             }
 
@@ -102,8 +129,9 @@ public class EditReview extends AppCompatActivity {
                             //Jsonデータを取得
                             JSONObject jsonObject = new JSONObject(response);
                             String success = jsonObject.getString("success");
-                            if (success.equals("1"))
-                                Toast.makeText(EditReview.this, "投稿が完了しました。", Toast.LENGTH_SHORT).show();
+                            if (success.equals("1")) {
+                                //Toast.makeText(EditReview.this, "投稿が完了しました。", Toast.LENGTH_SHORT).show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

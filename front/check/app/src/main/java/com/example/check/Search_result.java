@@ -43,7 +43,7 @@ public class Search_result extends AppCompatActivity implements AdapterView.OnIt
             ShopAdapter adapter = new ShopAdapter(this);
 
             /* 非同期通信処理の呼び出し */
-            new HttpResponse(this, adapter, listView, shopList).execute(new URL("https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid=2d6d76dbefd64c4b99ee433ca37f47a1"+ "&hit_per_page=20"+params));
+            new HttpResponse(this, adapter, listView, shopList).execute(new URL("https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid=c5a3da2d4febe4842a716efa9ae32c69"+ "&hit_per_page=10"+params));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

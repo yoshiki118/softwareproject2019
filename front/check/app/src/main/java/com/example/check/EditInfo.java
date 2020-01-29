@@ -153,7 +153,9 @@ public class EditInfo extends AppCompatActivity implements TextWatcher {
                             //Jsonデータを取得
                             JSONObject jsonObject = new JSONObject(response);
                             String success = jsonObject.getString("success");
-                            if (success.equals("1")) Toast.makeText(EditInfo.this, "投稿が完了しました。", Toast.LENGTH_SHORT).show();
+                            if (success.equals("1")){
+                                // Toast.makeText(EditInfo.this, "投稿が完了しました。", Toast.LENGTH_SHORT).show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

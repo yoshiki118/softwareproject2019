@@ -125,7 +125,7 @@ public class PlaceholderFragment extends Fragment {
                 if (pageViewModel.getIndex() == 1) {
                     try {
                         /* 非同期通信処理の呼び出し */
-                        new ShopHttpResponse(root).execute(new URL("https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid=85d315b3b18c6c8a69c7f0bb5f8023f9&id=" + s));
+                        new ShopHttpResponse(root).execute(new URL("https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid=c5a3da2d4febe4842a716efa9ae32c69&id=" + s));
 
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
@@ -134,7 +134,7 @@ public class PlaceholderFragment extends Fragment {
                     ImageAdapter adapter = new ImageAdapter(mactivity);
                     final ListView listView = root.findViewById(R.id.list_label);
                     try {
-                        new CoockHttpResponse(root, adapter, listView).execute(new URL("https://api.gnavi.co.jp/PhotoSearchAPI/v3/?keyid=85d315b3b18c6c8a69c7f0bb5f8023f9&shop_id=" + s));
+                        new CoockHttpResponse(root, adapter, listView).execute(new URL("https://api.gnavi.co.jp/PhotoSearchAPI/v3/?keyid=c5a3da2d4febe4842a716efa9ae32c69&shop_id=" + s));
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
