@@ -103,8 +103,8 @@ public class Rest_searchActivity extends AppCompatActivity {
         //小業態のspinner
         Spinner sp_category_s = (Spinner) findViewById(R.id.sp_shogyotai);
 
-        //ユーザ作成カテゴリのspinner
-        Spinner sp_Ucategory = (Spinner) findViewById(R.id.sp_Ucategory);
+        //ユーザ作成カテゴリのButton
+        Button sp_Ucategory = findViewById(R.id.textView14);
 
         //ぐるなびapiから都道府県マスタ取得,格納
         final ArrayList<String> al_pref = getCategory(URL_Pref);
@@ -145,20 +145,13 @@ public class Rest_searchActivity extends AppCompatActivity {
                 //検索結果画面に渡すデータ
                 String Add = pref + areacode_s + category_l + category_s + name;
                 Toast.makeText(Rest_searchActivity.this,Add,Toast.LENGTH_LONG).show();
-                //画面遷移前に検索条件に一致する店舗が存在するか確認する
-                boolean CHECK = check(URL_Rest_search + Add);
-                if(true) {
-                    Toast.makeText(Rest_searchActivity.this, Add, Toast.LENGTH_SHORT).show();
+
                     //検索結果画面
                     Intent intent = new Intent(getApplication(), Search_result.class);
                     intent.putExtra(EXTRA_DATA, Add);
-                    //pref = "";
-
-                    //category_l = "";
-                    //category_s = "";
                     //検索結果画面に遷移
                     startActivity(intent);
-                }
+
             }
         });
         // 都道府県spinnerのリスナーを登録
@@ -180,6 +173,8 @@ public class Rest_searchActivity extends AppCompatActivity {
                     al_area_s = getAreaS(URL_AreaS,item);
                     sp_area_s.setAdapter(ad_area_s);
                     ad_area_s.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                }else{
+                    pref = "";
                 }
             }
             //　アイテムが選択されなかった
@@ -197,6 +192,8 @@ public class Rest_searchActivity extends AppCompatActivity {
                 if(position != 0 ) {
                     //詳細エリアコード
                     areacode_s = "&areacode_s=" + al_area_s.get(position);
+                }else{
+                    areacode_s = "";
                 }
             }
             //　アイテムが選択されなかった
@@ -218,6 +215,8 @@ public class Rest_searchActivity extends AppCompatActivity {
                 if(position != 0 ) {
                     //大業態コード
                     category_l = "&category_l=" + al_daigyotai.get(position) ;
+                }else{
+                    category_l = "";
                 }
 
             }
@@ -237,6 +236,8 @@ public class Rest_searchActivity extends AppCompatActivity {
                 if(position != 0 ) {
                     //小業態コード
                     category_s = "&category_s=" + al_shogyotai.get(position) ;
+                }else{
+                    category_s = "";
                 }
             }
             //　アイテムが選択されなかった
@@ -374,41 +375,6 @@ public class Rest_searchActivity extends AppCompatActivity {
                     }
                 }));
         return arrayList;
-    }
-    public boolean check(final String URL) {
-        mQueue = Volley.newRequestQueue(this);
-        //final boolean CHECK = false;
-        mQueue.add(new JsonObjectRequest(Request.Method.GET, URL, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //成功時
-                        //Toast.makeText(Rest_searchActivity.this,"指定された条件の店舗が存在ません",Toast.LENGTH_SHORT ).show();
-                        //Check = true;
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override public void onErrorResponse(VolleyError error) {
-                        VolleyError newError = new VolleyError(new String(error.networkResponse.data));
-
-
-                        String e_message = newError.getMessage();
-                        String begin = "\"message\":";
-                        int begin_length = begin.length();
-                        String last = "\"";
-                        int beginIndex = e_message.indexOf(begin);
-                        int lastIndex = e_message.indexOf(last);
-                        //if(e_message != null) e_message = e_message.substring(beginIndex+begin_length+2,lastIndex+e_message.length()-25);
-                        input_check = e_message;
-                        Toast.makeText(Rest_searchActivity.this,e_message,Toast.LENGTH_SHORT).show();
-                        if(e_message.contains("指定された条件の店舗が存在しません")) {
-                            //Toast.makeText(Rest_searchActivity.this,"a",Toast.LENGTH_SHORT).show();
-                            Check = false;
-                        }
-                    }
-                }));
-        Toast.makeText(Rest_searchActivity.this,input_check,Toast.LENGTH_SHORT).show();
-        return Check;
     }
 }
 
