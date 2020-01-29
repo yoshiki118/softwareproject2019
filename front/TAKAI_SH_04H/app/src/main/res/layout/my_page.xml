@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/useredit"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:background="@drawable/mypage_buttonlay"
+        android:text="情報編集"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/userinquiry"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:text="問い合わせ"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/paidmember"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:background="@drawable/mypage_buttonlay"
+        android:text="有料会員変更"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/buttonwithdraw"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:text="退会"
+        android:textSize="30sp" />
+
+</LinearLayout>
