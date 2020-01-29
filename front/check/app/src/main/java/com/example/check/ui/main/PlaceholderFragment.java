@@ -38,6 +38,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.check.ShopInfo;
+import com.example.check.ShopSubmit;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -115,7 +116,7 @@ public class PlaceholderFragment extends Fragment {
         pageViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable final String s) {
-
+                    sendinfo(s, "root0000");
                 if (pageViewModel.getIndex() == 1) {
                     try {
                         /* 非同期通信処理の呼び出し */
@@ -364,4 +365,55 @@ public class PlaceholderFragment extends Fragment {
 
 
 
+
+    public void sendinfo(final String shopid,final String shoppass){
+        final String URL_REGIST =  "http://52.199.105.121/shop_register.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_REGIST,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try{
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success = jsonObject.getString("success");
+//
+//                            if (success.equals("1")) {
+//                                Toast.makeText(mactivity.this, "Register Success!", Toast.LENGTH_SHORT).show();
+//
+//                            }else {
+//
+//                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            //Toast.makeText(.this,"Register Error!" + e.toString(),Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Toast.makeText(ShopSubmit.this,"Register Error!" + error.toString(),Toast.LENGTH_SHORT).show();
+                        //    loading.setVisibility(View.GONE);
+                        //    button.setVisibility(View.VISIBLE);
+                    }
+                })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+
+                params.put("shopid", shopid);
+                params.put("password", shoppass);
+
+
+
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(mactivity);
+        requestQueue.add(stringRequest);
+    }
 }
+
+
+

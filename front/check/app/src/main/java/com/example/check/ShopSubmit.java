@@ -130,6 +130,8 @@ public class ShopSubmit extends AppCompatActivity {
                                 if (success.equals("1")) {
                                     Toast.makeText(ShopSubmit.this, "Register Success!", Toast.LENGTH_SHORT).show();
                                     nextPage();
+                                }else {
+
                                 }
 
                             } catch (JSONException e) {
@@ -161,7 +163,5 @@ public class ShopSubmit extends AppCompatActivity {
             };
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             requestQueue.add(stringRequest);
-
-
     }
 }
