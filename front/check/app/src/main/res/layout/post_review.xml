@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="157dp"
         android:layout_height="30dp"
-        android:text="お知らせを記入"
+        android:text="レビューを投稿する"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.633"
@@ -35,7 +35,7 @@
         android:layout_height="176dp"
         android:ems="10"
         android:gravity="top|left"
-        android:hint="200文字まで入力可"
+        android:hint="500文字まで入力可"
         android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
