@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.check">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name=".MyApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.check.Search_result"
+            android:label="@string/app_shopinfo">
+        </activity>
+
+        <activity
+            android:name="com.example.check.Rest_searchActivity"
+            android:label="@string/app_shopinfo">
+        </activity>
+        <activity
+            android:name="com.example.check.ShopInfo"
+            android:label="@string/app_shopinfo">
+        </activity>
+        <activity
+            android:name=".FormSelection"
+            android:label="@string/app_welcome"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".UserLogin"
+            android:label="@string/app_userlog"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".UserSubmit"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".UserTop"
+            android:label="@string/app_topname"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".ShopLogin"
+            android:label="@string/app_shoplog"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".ShopSubmit"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".ShopHome"
+            android:label="@string/app_shophome"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".SearchShop"
+            android:label="@string/app_search"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+        android:name=".Titlebar"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+    </activity>
+
+        <activity
+            android:name=".MyPage"
+            android:label="@string/app_mypage"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".UserEdit"
+            android:label="@string/app_useredit"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".InquiryActivity"
+            android:label="@string/app_inquiry"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".PaidChange"
+            android:label="@string/app_paid"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".Withdraw"
+            android:label="@string/app_withdraw"
+            android:theme="@style/AppTheme">
+        </activity>
+
+        <activity
+            android:name=".EditInfo"
+            android:label="@string/app_editinfo"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".MyCategoryview"
+            android:label="@string/app_mycategoryview"
+            android:theme="@style/AppTheme">
+        </activity>
+
+
+        <activity
+            android:name=".CreateCategory"
+            android:label="カテゴリ作成"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".EditReview"
+            android:label="レビュー投稿"
+            android:theme="@style/AppTheme">
+        </activity>
+
+    </application>
+
+</manifest>
