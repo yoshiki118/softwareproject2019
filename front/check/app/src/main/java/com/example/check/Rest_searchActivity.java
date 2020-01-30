@@ -160,7 +160,7 @@ public class Rest_searchActivity extends AppCompatActivity {
 
                     //検索結果画面
                     Intent intent = new Intent(getApplication(), Search_result.class);
-                    intent.putExtra(EXTRA_DATA, Add);
+                    intent.putExtra("str", Add);
                     //検索結果画面に遷移
                     startActivity(intent);
 

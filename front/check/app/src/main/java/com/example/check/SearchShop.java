@@ -69,11 +69,11 @@ public class SearchShop extends AppCompatActivity {
         Button searchButton = findViewById(R.id.searchButton);
 
         //五十音のspinner
-        Spinner sp_1 = (Spinner)findViewById(R.id.sp_1);
+        final Spinner sp_1 = (Spinner)findViewById(R.id.sp_1);
         //五十音のspinner
-        Spinner sp_2 = (Spinner)findViewById(R.id.sp_2);
+        final Spinner sp_2 = (Spinner)findViewById(R.id.sp_2);
         //五十音のspinner
-        Spinner sp_3 = (Spinner)findViewById(R.id.sp_3);
+        final Spinner sp_3 = (Spinner)findViewById(R.id.sp_3);
 
         //category1のspinner
         final Spinner sp_cate1 = (Spinner)findViewById(R.id.category1);
@@ -287,11 +287,18 @@ public class SearchShop extends AppCompatActivity {
                 startActivity(intent);
 
 
-                Toast.makeText(SearchShop.this, params, Toast.LENGTH_LONG).show();
+                //Toast.makeText(SearchShop.this, params, Toast.LENGTH_LONG).show();
                 params.delete(0, params.length());
                 al_cate1.clear();
                 al_cate2.clear();
                 al_cate3.clear();
+                sp_1.setSelection(0);
+                sp_2.setSelection(0);
+                sp_3.setSelection(0);
+                sp_cate1.setSelection(0);
+                sp_cate2.setSelection(0);
+                sp_cate3.setSelection(0);
+
 
             }
         });

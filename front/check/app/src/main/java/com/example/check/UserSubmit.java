@@ -55,7 +55,7 @@ public class UserSubmit extends AppCompatActivity {
     private String notequal;
     private ProgressBar loading;
     private static String URL_REGIST ="http://52.199.105.121/register.php";
-    private static String URL_Pref = "https://api.gnavi.co.jp/master/PrefSearchAPI/v3/?keyid=85d315b3b18c6c8a69c7f0bb5f8023f9&lang=ja";
+    private static String URL_Pref = "https://api.gnavi.co.jp/master/PrefSearchAPI/v3/?keyid=c5a3da2d4febe4842a716efa9ae32c69&lang=ja";
     private RequestQueue mQueue;
     private Button button;
     private String sextext = "";

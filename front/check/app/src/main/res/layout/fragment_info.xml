@@ -7,7 +7,8 @@
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="店舗からのお知らせはありません" />
+        android:text="店舗からのお知らせはありません"
+        android:textSize="20dp"/>
 
     <TextView
         android:id="@+id/textView1"

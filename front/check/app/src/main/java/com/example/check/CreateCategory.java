@@ -4,9 +4,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -73,21 +71,13 @@ public class CreateCategory extends AppCompatActivity {
                 String Cate = cate.getText().toString();
                 String Cate_kana = cate_kana.getText().toString();
                 int text_count = Cate.length();
-                if (text_count == 0){
-                    new AlertDialog.Builder(v.getContext())
-                            .setTitle("エラー")
-                            .setMessage("カテゴリ名が入力されていません")
-                            .setPositiveButton("OK", null)
-                            .show();}
+                if (text_count == 0)
+                    Toast.makeText(CreateCategory.this, "カテゴリ名が入力されていません", Toast.LENGTH_SHORT).show();
                 if (text_count != 0 && text_count <= 20) {
-                    post(Cate,Cate_kana,username,SHOPID,v);
+                    post(Cate,Cate_kana,username,SHOPID);
                     //finish();
                 } else {
-                    new AlertDialog.Builder(v.getContext())
-                            .setTitle("ごめんなさい...")
-                            .setMessage("できれば20文字以内でお願いします")
-                            .setPositiveButton("OK", null)
-                            .show();
+                    Toast.makeText(CreateCategory.this, "できれば20文字以内でお願いします。", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -107,7 +97,7 @@ public class CreateCategory extends AppCompatActivity {
 
 
     //カテゴリを作成
-    public void post(final String Cate,final String cate_kana,final String username, final String shopid,final View view) {
+    public void post(final String Cate,final String cate_kana,final String username, final String shopid) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Cate,
                 new Response.Listener<String>() {
@@ -119,23 +109,10 @@ public class CreateCategory extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             String success = jsonObject.getString("success");
                             if (success.equals("1")) {
-                                new AlertDialog.Builder(view.getContext())
-                                        .setTitle("作成完了")
-                                        .setMessage("新しいカテゴリを作成しました")
-                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            //OKを押すと元の画面に戻る
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                finish();
-                                            }
-                                        })
-                                        .show();
+                                Toast.makeText(CreateCategory.this, "作成が完了しました。", Toast.LENGTH_SHORT).show();
+                                finish();
                             }else{
-                                new AlertDialog.Builder(view.getContext())
-                                        .setTitle("エラー")
-                                        .setMessage("「"+Cate + "」\nはすでに存在します")
-                                        .setPositiveButton("OK", null)
-                                        .show();
+                                Toast.makeText(CreateCategory.this, Cate+"はすでに存在します", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
