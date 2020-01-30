@@ -186,7 +186,7 @@ public class PlaceholderFragment extends Fragment {
                             //選択した項目の取得
                             item = spinner.getSelectedItem().toString();
                             hurigana = kanak.get(position);
-                            Toast.makeText(mactivity,item,Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(mactivity,item,Toast.LENGTH_SHORT).show();
                         }
 
                         @Override

@@ -58,7 +58,7 @@ public class InquiryActivity extends AppCompatActivity implements TextWatcher {
         //受け取る
         MyApp myApp = (MyApp)this.getApplication();
         INQUIRYACTIVITY = myApp.getTestString();
-        Toast.makeText(InquiryActivity.this, INQUIRYACTIVITY, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(InquiryActivity.this, INQUIRYACTIVITY, Toast.LENGTH_SHORT).show();
 
         //アクションバーに戻るボタンを実装
         ActionBar actionBar = getSupportActionBar();
@@ -105,7 +105,7 @@ public class InquiryActivity extends AppCompatActivity implements TextWatcher {
                             .setPositiveButton("OK", null)
                             .show();
                 }
-                if (text_count <= INQUIRYNUMBER) {
+                else if (text_count <= INQUIRYNUMBER) {
                     POST(item,text);
                     new AlertDialog.Builder(v.getContext())
                             .setTitle("送信完了")
